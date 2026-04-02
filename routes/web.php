@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupplierController; 
 
-Route::get('/', function () {
+Route::get('/halo', function () {
     return view('welcome');
 });
 
