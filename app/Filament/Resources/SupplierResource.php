@@ -4,11 +4,20 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SupplierResource\Pages;
 use App\Models\Supplier;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+
+// Import komponen form
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Group;
+
+// Import komponen tabel
+use Filament\Tables\Columns\TextColumn;
 
 class SupplierResource extends Resource
 {
@@ -24,19 +33,40 @@ class SupplierResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_supplier')
-                    ->label('Nama Supplier')
-                    ->required()
-                    ->maxLength(255),
+                Section::make('Informasi Supplier')
+                    ->schema([
+                        Group::make()
+                            ->schema([
+                                TextInput::make('nama_supplier')
+                                    ->label('Nama Supplier')
+                                    ->required()
+                                    ->maxLength(255),
 
-                Forms\Components\Textarea::make('alamat')
-                    ->label('Alamat')
-                    ->rows(3),
+                                TextInput::make('no_telp')
+                                    ->label('No Telepon')
+                                    ->tel()
+                                    ->required()
+                                    ->maxLength(20),
+                            ]),
 
-                Forms\Components\TextInput::make('no_telp')
-                    ->label('No Telepon')
-                    ->tel()
-                    ->maxLength(20),
+                        Group::make()
+                            ->schema([
+                                Textarea::make('alamat')
+                                    ->label('Alamat')
+                                    ->required()
+                                    ->rows(5), 
+                            ]),
+                    ])
+                    ->columns(2),
+
+               Section::make('Arsip Dokumen')
+                    ->schema([
+                        FileUpload::make('dokumen_invoice')
+                            ->label('Dokumen Invoice')
+                            ->directory('invoice_documents')
+                            ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png'])
+                            ->required(),
+                    ]),
             ]);
     }
 
@@ -44,32 +74,45 @@ class SupplierResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama_supplier')
+                TextColumn::make('nama_supplier')
                     ->label('Nama Supplier')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('alamat')
+                TextColumn::make('alamat')
                     ->label('Alamat')
                     ->limit(30),
 
-                Tables\Columns\TextColumn::make('no_telp')
+                TextColumn::make('no_telp')
                     ->label('No Telepon'),
 
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('dokumen_invoice')
+                    ->label('Dokumen')
+                    // cek file nya ada atau tidak supaya tidak error Not Found
+                    ->url(fn($record) => $record->dokumen_invoice ? asset('storage/' . $record->dokumen_invoice) : null, true)
+                    ->formatStateUsing(fn($state) => $state 
+                        ? '<a href="' . asset('storage/' . $state) . '" target="_blank"><i class="fas fa-file-pdf"></i> 📄 </a>' 
+                        : 'Tidak Ada File')
+                    ->html(), 
+
+                TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(), // 🔥 ini biar bisa hapus
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
