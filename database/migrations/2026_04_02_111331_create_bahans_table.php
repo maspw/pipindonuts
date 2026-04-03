@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('nama_bahan');
             $table->string('satuan');
             $table->integer('stok_qty')->default(0);
-            $table->string('dokumen')->nullable();
+            $table->string('dokumen')->nullable(); 
+            $table->date('tgl_masuk')->nullable();
+            $table->date('tgl_kadaluarsa')->nullable();
             $table->timestamps();
         });
     }

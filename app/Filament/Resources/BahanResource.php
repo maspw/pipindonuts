@@ -23,7 +23,27 @@ class BahanResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('nama_bahan')->required(),
+                Forms\Components\Select::make('satuan')
+                    ->options([
+                        'kg' => 'Kilogram',
+                        'gr' => 'Gram',
+                        'liter' => 'Liter',
+                        'pcs' => 'Pcs',
+                    ])->required(),
+                Forms\Components\TextInput::make('stok_qty')->numeric()->default(0),
+                
+                Forms\Components\FileUpload::make('dokumen')
+                ->directory('bahan-dokumen')
+                ->preserveFilenames()
+                ->openable()
+                ->downloadable(),
+                
+                Forms\Components\DatePicker::make('tgl_masuk')
+                ->label('Tanggal Masuk')
+                ->default(now()),
+                Forms\Components\DatePicker::make('tgl_kadaluarsa')
+                ->label('Tanggal Kadaluarsa'),
             ]);
     }
 
@@ -31,7 +51,15 @@ class BahanResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('nama_bahan')->searchable(),
+                Tables\Columns\TextColumn::make('satuan'),
+                Tables\Columns\TextColumn::make('stok_qty')->sortable(),
+                Tables\Columns\TextColumn::make('tgl_kadaluarsa')->date()->sortable(),
+                
+                Tables\Columns\TextColumn::make('dokumen')
+                ->label('Berkas')
+                ->formatStateUsing(fn ($state) => $state ? 'Lihat' : 'Kosong')
+                ->url(fn ($record) => $record->dokumen ? asset('storage/' . $record->dokumen) : null, true),
             ])
             ->filters([
                 //
