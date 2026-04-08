@@ -34,7 +34,7 @@ class BahanResource extends Resource
                 Forms\Components\TextInput::make('stok_qty')->numeric()->default(0),
                 
                 Forms\Components\FileUpload::make('dokumen')
-                ->directory('bahan-dokumen')
+                ->directory('bahan-dokumen') 
                 ->preserveFilenames()
                 ->openable()
                 ->downloadable(),
@@ -67,6 +67,11 @@ class BahanResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('view')
+                ->label('Lihat Dokumen')
+                ->icon('heroicon-o-eye')
+                ->url(fn ($record) => $record->dokumen ? asset('storage/' . $record->dokumen) : null, true)
+                ->hidden(fn ($record) => !$record->dokumen),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
