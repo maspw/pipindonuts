@@ -16,9 +16,8 @@ return new class extends Migration
             $table->string('nama_bahan');
             $table->string('satuan');
             $table->integer('stok_qty')->default(0);
-            $table->string('dokumen')->nullable(); 
-            $table->date('tgl_masuk')->nullable();
-            $table->date('tgl_kadaluarsa')->nullable();
+            $table->integer('stok_minimum')->default(0);
+            $table->date('tgl_exp')->nullable();
             $table->timestamps();
         });
     }
@@ -30,4 +29,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('bahan');
     }
+    
 };
