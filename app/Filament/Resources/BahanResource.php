@@ -103,13 +103,15 @@ class BahanResource extends Resource
                     ->sortable()
                     ->weight('semibold'),
 
-                Tables\Columns\BadgeColumn::make('satuan')
+                Tables\Columns\TextColumn::make('satuan')
                     ->label('Satuan')
-                    ->colors([
-                        'info'    => fn ($state) => in_array($state, ['kg', 'gr']),
-                        'success' => fn ($state) => in_array($state, ['liter', 'ml']),
-                        'warning' => fn ($state) => in_array($state, ['pcs', 'pack', 'dus']),
-                    ]),
+                    ->badge()
+                    ->color(fn ($state) => match(true) {
+                        in_array($state, ['kg', 'gr'])       => 'info',
+                        in_array($state, ['liter', 'ml'])    => 'success',
+                        in_array($state, ['pcs', 'pack', 'dus']) => 'warning',
+                        default => 'gray',
+                    }),
 
                 Tables\Columns\TextColumn::make('stok_qty')
                     ->label('Stok')
