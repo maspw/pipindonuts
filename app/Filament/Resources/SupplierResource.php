@@ -20,6 +20,8 @@ class SupplierResource extends Resource
 
     protected static ?string $navigationLabel = 'Supplier';
 
+    protected static ?string $modelLabel = 'Supplier';
+
     protected static ?string $pluralModelLabel = 'Data Supplier';
 
     protected static ?int $navigationSort = 1;
@@ -28,19 +30,36 @@ class SupplierResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_supplier')
-                    ->label('Nama Supplier')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Section::make('Informasi Supplier')
+                    ->description('Data identitas supplier/pemasok bahan baku')
+                    ->icon('heroicon-o-building-storefront')
+                    ->schema([
+                        Forms\Components\TextInput::make('nama_supplier')
+                            ->label('Nama Supplier')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('Contoh: PT. Maju Jaya'),
 
-                Forms\Components\Textarea::make('alamat')
-                    ->label('Alamat')
-                    ->rows(3),
+                        Forms\Components\TextInput::make('no_telp')
+                            ->label('No. Telepon')
+                            ->tel()
+                            ->required()
+                            ->maxLength(20)
+                            ->placeholder('Contoh: 08123456789'),
+                    ])
+                    ->columns(2),
 
-                Forms\Components\TextInput::make('no_telp')
-                    ->label('No Telepon')
-                    ->tel()
-                    ->maxLength(20),
+                Forms\Components\Section::make('Alamat')
+                    ->description('Lokasi supplier')
+                    ->icon('heroicon-o-map-pin')
+                    ->schema([
+                        Forms\Components\Textarea::make('alamat')
+                            ->label('Alamat Lengkap')
+                            ->rows(3)
+                            ->maxLength(500)
+                            ->placeholder('Jl. Contoh No. 123, Kota...')
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 
@@ -51,38 +70,56 @@ class SupplierResource extends Resource
                 Tables\Columns\TextColumn::make('nama_supplier')
                     ->label('Nama Supplier')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('semibold'),
+
+                Tables\Columns\TextColumn::make('no_telp')
+                    ->label('No. Telepon')
+                    ->icon('heroicon-o-phone')
+                    ->copyable()
+                    ->copyMessage('Nomor disalin!')
+                    ->color('gray'),
 
                 Tables\Columns\TextColumn::make('alamat')
                     ->label('Alamat')
-                    ->limit(30),
-
-                Tables\Columns\TextColumn::make('no_telp')
-                    ->label('No Telepon'),
+                    ->limit(40)
+                    ->tooltip(fn ($record) => $record->alamat)
+                    ->color('gray'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Dibuat')
-                    ->dateTime()
-                    ->sortable(),
+                    ->label('Didaftarkan')
+                    ->since()
+                    ->sortable()
+                    ->color('gray')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('nama_supplier')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(), // 🔥 ini biar bisa hapus
+                Tables\Actions\EditAction::make()
+                    ->label('Edit'),
+                Tables\Actions\DeleteAction::make()
+                    ->label('Hapus'),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]);
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label('Hapus yang Dipilih'),
+                ]),
+            ])
+            ->emptyStateIcon('heroicon-o-building-storefront')
+            ->emptyStateHeading('Belum ada supplier')
+            ->emptyStateDescription('Tambahkan supplier pertama untuk mulai mencatat pembelian bahan baku.');
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSuppliers::route('/'),
+            'index'  => Pages\ListSuppliers::route('/'),
             'create' => Pages\CreateSupplier::route('/create'),
-            'edit' => Pages\EditSupplier::route('/{record}/edit'),
+            'edit'   => Pages\EditSupplier::route('/{record}/edit'),
         ];
     }
 }

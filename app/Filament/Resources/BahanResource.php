@@ -106,58 +106,49 @@ class BahanResource extends Resource
                 Tables\Columns\TextColumn::make('satuan')
                     ->label('Satuan')
                     ->badge()
-                    ->color(fn ($state) => match(true) {
-                        in_array($state, ['kg', 'gr'])       => 'info',
-                        in_array($state, ['liter', 'ml'])    => 'success',
+                    ->color(fn (string $state) => match(true) {
+                        in_array($state, ['kg', 'gr'])           => 'info',
+                        in_array($state, ['liter', 'ml'])        => 'success',
                         in_array($state, ['pcs', 'pack', 'dus']) => 'warning',
-                        default => 'gray',
+                        default                                  => 'gray',
                     }),
 
                 Tables\Columns\TextColumn::make('stok_qty')
                     ->label('Stok')
                     ->sortable()
-                    ->formatStateUsing(fn ($record) => $record->stok_qty . ' ' . $record->satuan)
-                    ->color(fn ($record) => $record->stok_qty <= $record->stok_minimum ? 'danger' : 'success')
-                    ->icon(fn ($record) => $record->stok_qty <= $record->stok_minimum
-                        ? 'heroicon-o-exclamation-triangle'
-                        : 'heroicon-o-check-circle'
-                    )
+                    ->formatStateUsing(fn ($state, $record) => $state . ' ' . $record->satuan)
+                    ->color(fn ($state, $record) => $state <= $record->stok_minimum ? 'danger' : 'success')
                     ->weight('semibold'),
 
                 Tables\Columns\TextColumn::make('stok_minimum')
                     ->label('Min. Stok')
                     ->sortable()
-                    ->formatStateUsing(fn ($record) => $record->stok_minimum . ' ' . $record->satuan)
+                    ->formatStateUsing(fn ($state, $record) => $state . ' ' . $record->satuan)
                     ->color('gray'),
 
                 Tables\Columns\TextColumn::make('tgl_exp')
                     ->label('Kadaluarsa')
                     ->date('d M Y')
                     ->sortable()
-                    ->placeholder('—')
-                    ->color(function ($record) {
-                        if (!$record->tgl_exp) return 'gray';
-                        if ($record->tgl_exp->isPast()) return 'danger';
-                        if ($record->tgl_exp->diffInDays(now()) <= 7) return 'warning';
-                        return 'success';
-                    })
-                    ->icon(function ($record) {
-                        if (!$record->tgl_exp) return null;
-                        if ($record->tgl_exp->isPast()) return 'heroicon-o-x-circle';
-                        if ($record->tgl_exp->diffInDays(now()) <= 7) return 'heroicon-o-clock';
-                        return null;
+                    ->default('—')
+                    ->color(fn ($state, $record) => match(true) {
+                        !$record->tgl_exp                                       => 'gray',
+                        $record->tgl_exp->isPast()                              => 'danger',
+                        $record->tgl_exp->diffInDays(now(), true) <= 7          => 'warning',
+                        default                                                 => 'success',
                     }),
 
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Diperbarui')
-                    ->since()
+                    ->date('d M Y')
+                    ->sortable()
                     ->color('gray')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('nama_bahan')
             ->filters([
                 SelectFilter::make('satuan')
-                    ->label('Satuan')
+                    ->label('Filter Satuan')
                     ->options([
                         'kg'    => 'Kilogram (kg)',
                         'gr'    => 'Gram (gr)',
@@ -171,16 +162,14 @@ class BahanResource extends Resource
 
                 Tables\Filters\Filter::make('stok_menipis')
                     ->label('Stok Menipis')
-                    ->query(fn (Builder $query) => $query->whereColumn('stok_qty', '<=', 'stok_minimum'))
-                    ->toggle(),
+                    ->query(fn (Builder $query) => $query->whereColumn('stok_qty', '<=', 'stok_minimum')),
 
                 Tables\Filters\Filter::make('hampir_kadaluarsa')
                     ->label('Hampir / Sudah Kadaluarsa')
                     ->query(fn (Builder $query) => $query
                         ->whereNotNull('tgl_exp')
                         ->where('tgl_exp', '<=', now()->addDays(7))
-                    )
-                    ->toggle(),
+                    ),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
