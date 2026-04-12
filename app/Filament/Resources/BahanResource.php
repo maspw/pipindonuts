@@ -62,13 +62,26 @@ class BahanResource extends Resource
                     ->description('Kelola jumlah stok dan batas peringatan minimum')
                     ->icon('heroicon-o-chart-bar')
                     ->schema([
+                        // Saat CREATE — bisa diisi untuk saldo awal
                         Forms\Components\TextInput::make('stok_qty')
-                            ->label('Stok Saat Ini')
+                            ->label('Stok Awal')
                             ->numeric()
                             ->default(0)
                             ->minValue(0)
                             ->suffix(fn ($get) => $get('satuan') ?? '')
-                            ->required(),
+                            ->helperText('Isi jika sudah punya stok awal. Selanjutnya stok diupdate otomatis via transaksi.')
+                            ->hiddenOn('edit'),
+
+                        // Saat EDIT — hanya tampil, tidak bisa diubah
+                        Forms\Components\TextInput::make('stok_qty')
+                            ->label('Stok Saat Ini')
+                            ->numeric()
+                            ->default(0)
+                            ->disabled()
+                            ->dehydrated()
+                            ->suffix(fn ($get) => $get('satuan') ?? '')
+                            ->helperText('⚠️ Stok hanya berubah otomatis melalui transaksi Pembelian Bahan')
+                            ->visibleOn('edit'),
 
                         Forms\Components\TextInput::make('stok_minimum')
                             ->label('Stok Minimum (Alert)')

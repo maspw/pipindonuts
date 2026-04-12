@@ -90,6 +90,18 @@ class PembelianBahanbakuResource extends Resource
                                     ->required()
                                     ->searchable()
                                     ->native(false)
+                                    ->live()
+                                    ->afterStateUpdated(function (Get $get, Set $set) {
+                                        $bahan = Bahan::find($get('bahan_id'));
+                                        if ($bahan) {
+                                            $set('jumlah', $bahan->stok_qty);
+                                            $harga = (int) $get('harga_satuan') ?: 0;
+                                            $set('sub_total', $bahan->stok_qty * $harga);
+                                        } else {
+                                            $set('jumlah', null);
+                                            $set('sub_total', 0);
+                                        }
+                                    })
                                     ->columnSpan(2),
 
                                 Forms\Components\TextInput::make('jumlah')
@@ -97,6 +109,7 @@ class PembelianBahanbakuResource extends Resource
                                     ->numeric()
                                     ->required()
                                     ->minValue(1)
+                                    ->suffix(fn (Get $get) => Bahan::find($get('bahan_id'))?->satuan ?? '')
                                     ->live(onBlur: true)
                                     ->afterStateUpdated(function (Get $get, Set $set) {
                                         $jumlah = (int) $get('jumlah') ?: 0;
@@ -193,7 +206,7 @@ class PembelianBahanbakuResource extends Resource
                     ->money('IDR')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('detilPembelian_count')
+                Tables\Columns\TextColumn::make('detil_pembelian_count')
                     ->label('Jml Item')
                     ->counts('detilPembelian')
                     ->badge()
