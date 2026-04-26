@@ -12,8 +12,10 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-    protected $table = 'users'; 
-    protected $guarded = [];    
+
+    protected $table = 'users';
+
+    protected $guarded = [];
 
     /**
      * The attributes that are mass assignable.
@@ -47,5 +49,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Cuma user_group 'Admin' yang boleh masuk [cite: 310]
+        return $this->user_group === 'Admin';
     }
 }

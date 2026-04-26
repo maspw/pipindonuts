@@ -48,6 +48,7 @@ class PelangganResource extends Resource
                     ->label('No HP')
                     ->required()
                     ->tel()
+                    ->numeric()
                     ->maxLength(15),
             ]);
     }
