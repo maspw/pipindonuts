@@ -12,14 +12,14 @@ class Bahan extends Model
     protected $fillable = [
         'nama_bahan',
         'satuan',
-        'stok_qty',
+        'jml_stok',
         'stok_minimum',
         'tgl_exp',
     ];
 
     protected $casts = [
         'tgl_exp'       => 'date',
-        'stok_qty'      => 'integer',
+        'jml_stok'      => 'integer',
         'stok_minimum'  => 'integer',
     ];
 
@@ -28,7 +28,7 @@ class Bahan extends Model
      */
     public function getIsBelowMinimumAttribute(): bool
     {
-        return $this->stok_qty <= $this->stok_minimum;
+        return $this->jml_stok <= $this->stok_minimum;
     }
 
     /**

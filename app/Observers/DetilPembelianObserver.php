@@ -11,7 +11,7 @@ class DetilPembelianObserver
      */
     public function created(DetilPembelian $detil): void
     {
-        $detil->bahan()->increment('stok_qty', $detil->jumlah);
+        $detil->bahan()->increment('jml_stok', $detil->jumlah);
     }
 
     /**
@@ -22,9 +22,9 @@ class DetilPembelianObserver
         $selisih = $detil->jumlah - $detil->getOriginal('jumlah');
 
         if ($selisih > 0) {
-            $detil->bahan()->increment('stok_qty', $selisih);
+            $detil->bahan()->increment('jml_stok', $selisih);
         } elseif ($selisih < 0) {
-            $detil->bahan()->decrement('stok_qty', abs($selisih));
+            $detil->bahan()->decrement('jml_stok', abs($selisih));
         }
     }
 
@@ -33,6 +33,6 @@ class DetilPembelianObserver
      */
     public function deleted(DetilPembelian $detil): void
     {
-        $detil->bahan()->decrement('stok_qty', $detil->jumlah);
+        $detil->bahan()->decrement('jml_stok', $detil->jumlah);
     }
 }

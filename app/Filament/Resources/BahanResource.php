@@ -63,7 +63,7 @@ class BahanResource extends Resource
                     ->icon('heroicon-o-chart-bar')
                     ->schema([
                         // Saat CREATE — bisa diisi untuk saldo awal
-                        Forms\Components\TextInput::make('stok_qty')
+                        Forms\Components\TextInput::make('jml_stok')
                             ->label('Stok Awal')
                             ->numeric()
                             ->default(0)
@@ -73,7 +73,7 @@ class BahanResource extends Resource
                             ->hiddenOn('edit'),
 
                         // Saat EDIT — hanya tampil, tidak bisa diubah
-                        Forms\Components\TextInput::make('stok_qty')
+                        Forms\Components\TextInput::make('jml_stok')
                             ->label('Stok Saat Ini')
                             ->numeric()
                             ->default(0)
@@ -126,7 +126,7 @@ class BahanResource extends Resource
                         default                                  => 'gray',
                     }),
 
-                Tables\Columns\TextColumn::make('stok_qty')
+                Tables\Columns\TextColumn::make('jml_stok')
                     ->label('Stok')
                     ->sortable()
                     ->formatStateUsing(fn ($state, $record) => $state . ' ' . $record->satuan)
@@ -175,7 +175,7 @@ class BahanResource extends Resource
 
                 Tables\Filters\Filter::make('stok_menipis')
                     ->label('Stok Menipis')
-                    ->query(fn (Builder $query) => $query->whereColumn('stok_qty', '<=', 'stok_minimum')),
+                    ->query(fn (Builder $query) => $query->whereColumn('jml_stok', '<=', 'stok_minimum')),
 
                 Tables\Filters\Filter::make('hampir_kadaluarsa')
                     ->label('Hampir / Sudah Kadaluarsa')
