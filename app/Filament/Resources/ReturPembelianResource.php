@@ -8,12 +8,14 @@ use App\Models\DetilPembelian;
 use App\Models\Karyawan;
 use App\Models\PembelianBahanbaku;
 use App\Models\ReturPembelian;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 
 class ReturPembelianResource extends Resource
 {
@@ -221,12 +223,126 @@ class ReturPembelianResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+
+                    // ── Export PDF (selected rows) ───────────────
+                    Tables\Actions\BulkAction::make('export_pdf_selected')
+                        ->label('Export PDF')
+                        ->icon('heroicon-o-document-arrow-down')
+                        ->color('danger')
+                        ->form([static::columnForm()])
+                        ->action(function (Collection $records, array $data) {
+                            $cols   = $data['columns'];
+                            $returs = ReturPembelian::with(['pembelian.supplier', 'bahan', 'karyawan'])
+                                ->whereIn('id', $records->pluck('id'))
+                                ->orderBy('tgl_retur', 'desc')->get();
+
+                            $pdf = Pdf::loadView('exports.retur_pembelian_pdf', [
+                                'returs'        => $returs,
+                                'selectedCols'  => $cols,
+                                'columnLabels'  => array_intersect_key(static::columnOptions(), array_flip($cols)),
+                                'rows'          => $returs->map(fn ($r) => static::buildRow($r, $cols)),
+                                'generated'     => now()->format('d M Y H:i'),
+                            ])->setPaper('a4', 'landscape');
+
+                            return response()->streamDownload(
+                                fn () => print($pdf->output()),
+                                'retur-terpilih-' . now()->format('Y-m-d') . '.pdf',
+                                ['Content-Type' => 'application/pdf'],
+                            );
+                        }),
+
+                    // ── Export CSV (selected rows) ───────────────
+                    Tables\Actions\BulkAction::make('export_csv_selected')
+                        ->label('Export Excel / CSV')
+                        ->icon('heroicon-o-table-cells')
+                        ->color('success')
+                        ->form([static::columnForm()])
+                        ->action(function (Collection $records, array $data) {
+                            $cols   = $data['columns'];
+                            $labels = array_intersect_key(static::columnOptions(), array_flip($cols));
+                            $returs = ReturPembelian::with(['pembelian.supplier', 'bahan', 'karyawan'])
+                                ->whereIn('id', $records->pluck('id'))
+                                ->orderBy('tgl_retur', 'desc')->get();
+
+                            return response()->streamDownload(function () use ($returs, $cols, $labels) {
+                                $handle = fopen('php://output', 'w');
+                                fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+                                fputcsv($handle, array_values($labels));
+                                foreach ($returs as $r) {
+                                    fputcsv($handle, array_values(static::buildRow($r, $cols)));
+                                }
+                                fclose($handle);
+                            }, 'retur-terpilih-' . now()->format('Y-m-d') . '.csv',
+                                ['Content-Type' => 'text/csv; charset=UTF-8']);
+                        }),
+
                     Tables\Actions\DeleteBulkAction::make()->label('Hapus yang Dipilih'),
                 ]),
             ])
             ->emptyStateIcon('heroicon-o-arrow-uturn-left')
             ->emptyStateHeading('Belum ada retur pembelian')
             ->emptyStateDescription('Catat retur bahan baku pertama dengan klik tombol di atas.');
+    }
+
+    // ───────────────────────────────────────────────────
+    // HELPERS — Column selection
+    // ───────────────────────────────────────────────────
+
+    /** Semua kolom yang tersedia beserta labelnya. */
+    public static function columnOptions(): array
+    {
+        return [
+            'id'         => '#ID',
+            'supplier'   => 'Supplier',
+            'bahan'      => 'Bahan Diretur',
+            'tipe_retur' => 'Tipe Retur',
+            'jumlah'     => 'Jumlah',
+            'status'     => 'Status',
+            'alasan'     => 'Alasan',
+            'tgl_retur'  => 'Tgl Retur',
+            'karyawan'   => 'Karyawan',
+        ];
+    }
+
+    /** CheckboxList form component untuk pilih kolom. */
+    public static function columnForm(): \Filament\Forms\Components\CheckboxList
+    {
+        return \Filament\Forms\Components\CheckboxList::make('columns')
+            ->label('Pilih Kolom yang Diekspor')
+            ->options(static::columnOptions())
+            ->default(array_keys(static::columnOptions()))
+            ->columns(3)
+            ->required()
+            ->minItems(1)
+            ->helperText('Minimal 1 kolom harus dipilih.');
+    }
+
+    /** Bangun 1 baris data berdasarkan kolom yang dipilih. */
+    public static function buildRow(ReturPembelian $r, array $cols): array
+    {
+        $all = [
+            'id'         => '#' . $r->id,
+            'supplier'   => $r->pembelian?->supplier?->nama_supplier ?? '-',
+            'bahan'      => $r->bahan?->nama_bahan ?? '-',
+            'tipe_retur' => match ($r->tipe_retur) {
+                'rusak'       => 'Rusak',
+                'salah_kirim' => 'Salah Kirim',
+                'kelebihan'   => 'Kelebihan',
+                default       => 'Lainnya',
+            },
+            'jumlah'    => $r->jumlah . ' ' . ($r->bahan?->satuan ?? ''),
+            'status'    => ucfirst($r->status),
+            'alasan'    => $r->alasan ?? '-',
+            'tgl_retur' => $r->tgl_retur?->format('d/m/Y') ?? '-',
+            'karyawan'  => $r->karyawan?->nama ?? '-',
+        ];
+
+        // Pertahankan urutan sesuai $cols
+        $result = [];
+        foreach ($cols as $col) {
+            if (isset($all[$col])) $result[$col] = $all[$col];
+        }
+        return $result;
     }
 
     public static function getPages(): array
