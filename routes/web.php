@@ -6,8 +6,8 @@ use App\Http\Controllers\ReturPembelianController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\KasirAuthController;
 
-Route::get('/halo', function () {
-    return view('welcome');
+Route::get('/', function () {
+    return redirect()->route('kasir.index');
 });
 
 Route::get('/supplier', [SupplierController::class, 'index']);
