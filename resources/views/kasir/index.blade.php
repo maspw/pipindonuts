@@ -256,10 +256,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
                     <div class="icon">💵</div>
                     <div class="label">Tunai</div>
                 </div>
-                <div class="pay-method" :class="{ active: metodeBayar === 'transfer' }" @click="metodeBayar = 'transfer'; jumlahBayar = total">
-                    <div class="icon">🏦</div>
-                    <div class="label">Transfer</div>
-                </div>
                 <div class="pay-method" :class="{ active: metodeBayar === 'qris' }" @click="metodeBayar = 'qris'; jumlahBayar = total">
                     <div class="icon">📱</div>
                     <div class="label">QRIS</div>
@@ -325,20 +321,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
         <div class="modal-foot">
             <button class="btn btn-secondary" @click="showPayment = false">Batal</button>
-
-            {{-- Tunai / Transfer: submit form biasa --}}
-            <template x-if="metodeBayar !== 'qris'">
-                <form method="POST" action="{{ route('kasir.transaksi') }}" style="flex:1">
-                    @csrf
-                    <input type="hidden" name="cart" :value="JSON.stringify(cart)">
-                    <input type="hidden" name="metode_bayar" :value="metodeBayar">
-                    <input type="hidden" name="jumlah_bayar" :value="jumlahBayar">
-                    <button type="submit" class="btn btn-primary" style="width:100%"
-                        :disabled="metodeBayar === 'tunai' && kembalian < 0">
-                        ✅ Konfirmasi Bayar
-                    </button>
-                </form>
-            </template>
 
             {{-- QRIS: lewat Midtrans Snap --}}
             <template x-if="metodeBayar === 'qris'">

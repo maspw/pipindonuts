@@ -20,7 +20,7 @@ class PembayaranResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
     
     // Label di sidebar
-    protected static ?string $navigationLabel = 'Riwayat Pembayaran';
+    protected static ?string $navigationLabel = 'Pembayaran';
 
     protected static ?string $navigationGroup = 'Transaksi';
 
@@ -70,7 +70,7 @@ class PembayaranResource extends Resource
             ])
             ->actions([
                 // Tombol view jika ingin melihat detail lebih dalam
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
