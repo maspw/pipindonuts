@@ -110,6 +110,14 @@ class BahanResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id_bahanbaku')
+                    ->label('Kode')
+                    ->badge()
+                    ->color('gray')
+                    ->copyable()
+                    ->copyMessage('Kode disalin!')
+                    ->fontFamily('mono'),
+
                 Tables\Columns\TextColumn::make('nama_bahan')
                     ->label('Nama Bahan')
                     ->searchable()
