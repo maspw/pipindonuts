@@ -4,108 +4,102 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SupplierResource\Pages;
 use App\Models\Supplier;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-// Import komponen form
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Group;
-
-// Import komponen tabel
 use Filament\Tables\Columns\TextColumn;
 
 class SupplierResource extends Resource
 {
     protected static ?string $model = Supplier::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
-
+    protected static ?string $navigationGroup = 'Master Data';
     protected static ?string $navigationLabel = 'Supplier';
-
-    protected static ?string $pluralLabel = 'Data Supplier';
-
+    protected static ?string $modelLabel = 'Supplier';
+    protected static ?string $pluralModelLabel = 'Data Supplier';
+    protected static ?int $navigationSort = 1;
     public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Section::make('Informasi Supplier')
-                    ->schema([
-                        Group::make()
-                            ->schema([
-                                TextInput::make('nama_supplier')
-                                    ->label('Nama Supplier')
-                                    ->required()
-                                    ->maxLength(255),
+{
+    return $form
+        ->schema([
+            Section::make('Input Data Supplier')
+                ->description('Lengkapi form di bawah ini untuk mengelola data master supplier.')
+                ->schema([
+                    TextInput::make('id_supplier')
+                        ->label('ID Supplier')
+                        ->default(function () {
+                            $latest = \App\Models\Supplier::orderBy('id_supplier', 'desc')->first();
+                            if (!$latest) return 'SUP001';
+                            
+                            $number = (int) filter_var($latest->id_supplier, FILTER_SANITIZE_NUMBER_INT) + 1;
+                            return 'SUP' . str_pad($number, 3, '0', STR_PAD_LEFT);
+                        })
+                        ->readOnly(),
 
-                                TextInput::make('no_telp')
-                                    ->label('No Telepon')
-                                    ->tel()
-                                    ->required()
-                                    ->maxLength(20),
-                            ]),
+                    TextInput::make('nama_supplier')
+                        ->label('Nama Supplier')
+                        ->required()
+                        ->maxLength(255),
 
-                        Group::make()
-                            ->schema([
-                                Textarea::make('alamat')
-                                    ->label('Alamat')
-                                    ->required()
-                                    ->rows(5), 
-                            ]),
-                    ])
-                    ->columns(2),
+                    TextInput::make('no_telp')
+                        ->label('No. Telepon')
+                        ->tel()
+                        ->required()
+                        ->maxLength(20),
 
-               Section::make('Arsip Dokumen')
-                    ->schema([
-                        FileUpload::make('dokumen_invoice')
-                            ->label('Dokumen Invoice')
-                            ->directory('invoice_documents')
-                            ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png'])
-                            ->required(),
-                    ]),
-            ]);
-    }
-
+                    Textarea::make('alamat')
+                        ->label('Alamat Lengkap')
+                        ->required()
+                        ->rows(3)
+                        ->columnSpanFull(),
+                ])->columns(2),
+        ]);
+}
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                TextColumn::make('id_supplier')
+                    ->label('ID Supplier')
+                    ->sortable()
+                    ->searchable()
+                    ->weight('bold')
+                    ->color('primary'),
+
                 TextColumn::make('nama_supplier')
                     ->label('Nama Supplier')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('semibold'),
+
+                TextColumn::make('no_telp')
+                    ->label('No. Telepon')
+                    ->icon('heroicon-o-phone')
+                    ->copyable()
+                    ->color('gray'),
 
                 TextColumn::make('alamat')
                     ->label('Alamat')
-                    ->limit(30),
-
-                TextColumn::make('no_telp')
-                    ->label('No Telepon'),
-
-                TextColumn::make('dokumen_invoice')
-                    ->label('Dokumen')
-                    // cek file nya ada atau tidak supaya tidak error Not Found
-                    ->url(fn($record) => $record->dokumen_invoice ? asset('storage/' . $record->dokumen_invoice) : null, true)
-                    ->formatStateUsing(fn($state) => $state 
-                        ? '<a href="' . asset('storage/' . $state) . '" target="_blank"><i class="fas fa-file-pdf"></i> 📄 </a>' 
-                        : 'Tidak Ada File')
-                    ->html(), 
+                    ->limit(40)
+                    ->tooltip(fn ($record): string => $record->alamat),
 
                 TextColumn::make('created_at')
-                    ->label('Dibuat')
-                    ->dateTime()
+                    ->label('Tgl Input')
+                    ->dateTime('d/m/Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('id_supplier', 'desc')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

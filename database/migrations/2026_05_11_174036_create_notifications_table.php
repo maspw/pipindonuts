@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bahans', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_bahan');
-            $table->string('satuan');
-            $table->integer('stok_qty')->default(0);
-            $table->integer('stok_minimum')->default(0);
-            $table->date('tgl_exp')->nullable();
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('type');
+            $table->morphs('notifiable');
+            $table->text('data');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
@@ -27,7 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bahan');
+        Schema::dropIfExists('notifications');
     }
-    
 };

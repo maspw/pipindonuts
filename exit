@@ -1,0 +1,48 @@
+[33m157d9a2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mrafi[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: pull origin main: Fast-forward
+[33m0d00ec4[m HEAD@{1}: checkout: moving from main to rafi
+[33m157d9a2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mrafi[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{2}: commit: tambah view modul bahan
+[33m989684a[m HEAD@{3}: pull origin main: Fast-forward
+[33mc968357[m HEAD@{4}: checkout: moving from sheila to main
+[33m45b989d[m[33m ([m[1;31morigin/Sheila[m[33m, [m[1;32mSheila[m[33m)[m HEAD@{5}: checkout: moving from main to sheila
+[33mc968357[m HEAD@{6}: commit: tambahan modul bahan
+[33mba5f1e8[m HEAD@{7}: commit: perbaikan modul bahan
+[33m330c324[m[33m ([m[1;32mtri[m[33m)[m HEAD@{8}: checkout: moving from main to main
+[33m330c324[m[33m ([m[1;32mtri[m[33m)[m HEAD@{9}: merge tri: Fast-forward
+[33m4837541[m HEAD@{10}: checkout: moving from tri to main
+[33m330c324[m[33m ([m[1;32mtri[m[33m)[m HEAD@{11}: checkout: moving from tri to tri
+[33m330c324[m[33m ([m[1;32mtri[m[33m)[m HEAD@{12}: pull origin main: Merge made by the 'ort' strategy.
+[33m1d45897[m[33m ([m[1;31morigin/tri[m[33m)[m HEAD@{13}: checkout: moving from main to tri
+[33m4837541[m HEAD@{14}: checkout: moving from Sheila to main
+[33m45b989d[m[33m ([m[1;31morigin/Sheila[m[33m, [m[1;32mSheila[m[33m)[m HEAD@{15}: checkout: moving from tri to Sheila
+[33m1d45897[m[33m ([m[1;31morigin/tri[m[33m)[m HEAD@{16}: checkout: moving from main to tri
+[33m4837541[m HEAD@{17}: merge Sheila: Merge made by the 'ort' strategy.
+[33m2d3a665[m HEAD@{18}: checkout: moving from Sheila to main
+[33m45b989d[m[33m ([m[1;31morigin/Sheila[m[33m, [m[1;32mSheila[m[33m)[m HEAD@{19}: checkout: moving from main to Sheila
+[33m2d3a665[m HEAD@{20}: checkout: moving from main to main
+[33m2d3a665[m HEAD@{21}: pull origin main: Fast-forward
+[33m0f3bc1f[m HEAD@{22}: commit: fix: restore isian master bahan yang kosong
+[33m9830a32[m HEAD@{23}: checkout: moving from revisi_rafi to main
+[33m2818789[m[33m ([m[1;31morigin/revisi_rafi[m[33m, [m[1;32mrevisi_rafi[m[33m)[m HEAD@{24}: commit: fix: restore isian master bahan yang kosong
+[33m1ec26c7[m HEAD@{25}: commit: modified bahanbahan
+[33mffe7fd3[m HEAD@{26}: checkout: moving from main to revisi_rafi
+[33m9830a32[m HEAD@{27}: merge revisi_rafi: Merge made by the 'ort' strategy.
+[33m9a64914[m HEAD@{28}: checkout: moving from revisi_rafi to main
+[33mffe7fd3[m HEAD@{29}: checkout: moving from revisi_rafi to revisi_rafi
+[33mffe7fd3[m HEAD@{30}: commit: hapus resource igredient
+[33meabae7a[m HEAD@{31}: commit: Modul Bahan bahan
+[33m9ba3c1c[m HEAD@{32}: checkout: moving from main to revisi_rafi
+[33m9a64914[m HEAD@{33}: commit: fix: hapus sisa file ingredient
+[33mecc1e26[m HEAD@{34}: commit: fix: hapus sisa file ingredient
+[33m060691e[m HEAD@{35}: commit: fix: hapus sisa file ingredient
+[33m2d24dc2[m HEAD@{36}: pull origin main: Fast-forward
+[33m0d00ec4[m HEAD@{37}: checkout: moving from revisi_rafi to main
+[33m9ba3c1c[m HEAD@{38}: pull origin main: Merge made by the 'ort' strategy.
+[33m6845372[m HEAD@{39}: commit: clean up file lama biar rapi
+[33m0d00ec4[m HEAD@{40}: checkout: moving from rafi to revisi_rafi
+[33m0d00ec4[m HEAD@{41}: checkout: moving from main to rafi
+[33m0d00ec4[m HEAD@{42}: pull: Fast-forward
+[33m5bea79c[m HEAD@{43}: pull: Fast-forward
+[33m4b3581c[m HEAD@{44}: Branch: renamed refs/heads/main to refs/heads/main
+[33m4b3581c[m HEAD@{46}: commit: init: crud master data beres
+[33m3a774bb[m HEAD@{47}: Branch: renamed refs/heads/master to refs/heads/main
+[33m3a774bb[m HEAD@{49}: commit (initial): init project
