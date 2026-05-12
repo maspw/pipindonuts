@@ -9,11 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up(): void
+  public function up(): void
 {
     Schema::create('detail_pembelian', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('pembelian_id')->constrained('pembelian_bahanbaku')->cascadeOnDelete();
+        $table->string('id_pembelian'); 
+        $table->foreign('id_pembelian')
+              ->references('id_pembelian') 
+              ->on('pembelian_bahanbaku')  
+              ->onDelete('cascade');
         $table->string('id_bahanbaku'); 
         $table->integer('jumlah');
         $table->decimal('harga_satuan', 15, 2);
@@ -21,7 +25,6 @@ return new class extends Migration
         $table->timestamps();
     });
 }
-
     /**
      * Reverse the migrations.
      */

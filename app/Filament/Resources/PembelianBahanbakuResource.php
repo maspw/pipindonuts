@@ -5,8 +5,12 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PembelianBahanbakuResource\Pages;
 use App\Models\PembelianBahanbaku;
 use App\Models\Bahan;
+use App\Models\Karyawan;
+use App\Models\Supplier;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,12 +24,11 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Support\HtmlString;
-
-// Import untuk PDF & Export
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ExportBulkAction;
 use App\Filament\Exports\PembelianBahanbakuExporter;
+use Illuminate\Database\Eloquent\Builder;
 
 class PembelianBahanbakuResource extends Resource
 {
@@ -33,6 +36,9 @@ class PembelianBahanbakuResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
     protected static ?string $navigationGroup = 'Transaksi';
     protected static ?string $navigationLabel = 'Pembelian Bahan Baku';
+    protected static ?string $modelLabel = 'Pembelian Bahan Baku';
+    protected static ?string $pluralModelLabel = 'Pembelian Bahan Baku';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -41,7 +47,7 @@ class PembelianBahanbakuResource extends Resource
                 // STEP 1: DATA PESANAN
                 Wizard\Step::make('Pesanan')->schema([
                     TextInput::make('id_pembelian')
-                        ->label('ID Pembelian')
+                        ->label('Id Pembelian')
                         ->default(fn () => PembelianBahanbaku::generateNoFaktur())
                         ->readOnly(),
                     DateTimePicker::make('tgl_beli')
@@ -55,7 +61,7 @@ class PembelianBahanbakuResource extends Resource
                         ->preload(),
                     Select::make('id_karyawan')
                         ->relationship('karyawan', 'nama')
-                        ->label('Admin/Karyawan')
+                        ->label('Karyawan')
                         ->required()
                         ->preload(),
                 ])->columns(2),
@@ -113,7 +119,6 @@ class PembelianBahanbakuResource extends Resource
                             ]);
                         }),
 
-                    // TOMBOL BAYAR DENGAN POP-UP & NOTIFIKASI
                     Forms\Components\Actions::make([
                         Action::make('confirm_payment')
                             ->label('Bayar') 
@@ -123,7 +128,7 @@ class PembelianBahanbakuResource extends Resource
                             ->requiresConfirmation()
                             ->modalHeading('Konfirmasi Pembayaran')
                             ->modalDescription('Apakah data transaksi sudah benar?')
-                            ->modalSubmitActionLabel('Ya, Simpan')
+                            ->modalSubmitActionLabel('Ya, bayar')
                             ->action(function (Forms\Contracts\HasForms $livewire, $record) {
                                 if ($record) {
                                     $livewire->save();
@@ -133,7 +138,7 @@ class PembelianBahanbakuResource extends Resource
                                 
                                 Notification::make()
                                     ->title('Transaksi Berhasil')
-                                    ->body('Data telah disimpan dan invoice sedang dikirim ke Mailtrap.')
+                                    ->body('Data telah disimpan dan invoice dikirim ke email.')
                                     ->success()
                                     ->send();
                             }),
@@ -157,7 +162,7 @@ class PembelianBahanbakuResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tgl_beli')
                     ->label('Tanggal')
-                    ->dateTime('d/m/Y H:i')
+                    ->dateTime('d/m/Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('supplier.nama_supplier')
                     ->label('Supplier'),
@@ -200,6 +205,11 @@ class PembelianBahanbakuResource extends Resource
                         ->label('Export Terpilih'),
                 ]),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [];
     }
 
     public static function getPages(): array

@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pembelian_bahanbaku', function (Blueprint $table) {
-            $table->id();
-            $table->string('no_faktur')->unique(); 
+           $table->string('id_pembelian')->primary(); 
             $table->string('id_supplier');
             $table->foreign('id_supplier')->references('id_supplier')->on('supplier');
             $table->string('id_karyawan');
@@ -23,7 +22,6 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
