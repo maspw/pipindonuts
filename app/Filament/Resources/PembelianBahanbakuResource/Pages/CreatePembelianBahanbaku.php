@@ -12,35 +12,36 @@ use App\Mail\InvoicePembelianMail;
 class CreatePembelianBahanbaku extends CreateRecord
 {
     protected static string $resource = PembelianBahanbakuResource::class;
+
     protected function getCreatedNotificationTitle(): ?string
     {
         return 'Pembayaran Berhasil';
     }
+protected function afterCreate(): void
+{
+    $pembelian = $this->record;
 
-    public function konfirmasiBayarAction(): Action
-    {
-        return Action::make('konfirmasiBayar')
-            ->requiresConfirmation()
-            ->modalHeading('Konfirmasi Pembayaran')
-            ->modalSubmitActionLabel('Ya, Bayar')
-            ->action(fn () => $this->create());
+    foreach ($pembelian->detail_pembelian as $detail) {
+        DB::table('bahans') 
+            ->where('id', $detail->id_bahanbaku) 
+            ->increment('stok_qty', $detail->jumlah); 
     }
 
-    protected function afterCreate(): void
+    try {
+        Mail::to('admin@mailtrap.io')->send(new InvoicePembelianMail($pembelian));
+    } catch (\Exception $e) {
+        // 
+    }
+}
+
+    protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $pembelian = $this->record;
-        foreach ($pembelian->detail_pembelian as $detail) {
-            DB::table('bahans')
-                ->where('id', $detail->id_bahanbaku)
-                ->increment('stok_qty', $detail->jumlah);
-        }
-        try {
-            Mail::to('admin@mailtrap.io')->send(new InvoicePembelianMail($pembelian));
-        } catch (\Exception $e) { }
+        $data['total_beli'] = $data['total_beli'] ?? 0;
+        return $data;
     }
 
-    protected function getRedirectUrl(): string 
-    { 
-        return $this->getResource()::getUrl('index'); 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }

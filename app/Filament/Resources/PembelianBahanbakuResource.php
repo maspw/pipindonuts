@@ -129,6 +129,7 @@ class PembelianBahanbakuResource extends Resource
                             ->modalHeading('Konfirmasi Pembayaran')
                             ->modalDescription('Apakah data transaksi sudah benar?')
                             ->modalSubmitActionLabel('Ya, bayar')
+                            ->hidden(fn ($operation) => $operation === 'view')
                             ->action(function (Forms\Contracts\HasForms $livewire, $record) {
                                 if ($record) {
                                     $livewire->save();

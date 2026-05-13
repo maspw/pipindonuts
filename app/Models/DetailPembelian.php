@@ -9,9 +9,13 @@ class DetailPembelian extends Model
 {
     protected $table = 'detail_pembelian';
     protected $guarded = [];
-
+    
     public function bahanbaku(): BelongsTo
     {
-        return $this->belongsTo(Bahan::class, 'id_bahanbaku', 'id');
+        return $this->belongsTo(Bahan::class, 'id_bahanbaku', 'id_bahanbaku');
+    }
+    public function pembelian(): BelongsTo
+    {
+        return $this->belongsTo(PembelianBahanbaku::class, 'id_pembelian', 'id_pembelian');
     }
 }
