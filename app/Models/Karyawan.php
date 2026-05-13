@@ -23,6 +23,7 @@ class Karyawan extends Model
         'e_ktp',
     ];
 
+
     // Relasi ke Pengeluaran Operasional
     public function pengeluaranOperasional()
     {
