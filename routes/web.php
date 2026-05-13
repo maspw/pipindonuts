@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupplierController; 
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Route::get('/halo', function () {
     return view('welcome');
 });
@@ -10,3 +14,6 @@ Route::get('/halo', function () {
 Route::get('/supplier', [SupplierController::class, 'index']);
 Route::get('/supplier/create', [SupplierController::class, 'create']);
 Route::post('/supplier', [SupplierController::class, 'store']);
+Route::get('/depan', [App\Http\Controllers\KeranjangController::class, 'daftarbarang'])
+    ->middleware('customer') 
+    ->name('depan');

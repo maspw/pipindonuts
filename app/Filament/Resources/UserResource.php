@@ -51,7 +51,12 @@ class UserResource extends Resource
             Tables\Columns\TextColumn::make('email'),
             Tables\Columns\TextColumn::make('user_group')
                 ->label('Role')
-                ->badge(),
+                ->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    'Admin' => 'danger', 
+                    'Kasir' => 'success',
+                    default => 'gray',
+                }),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user_group')
