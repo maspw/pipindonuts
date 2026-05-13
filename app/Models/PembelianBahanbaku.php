@@ -15,6 +15,18 @@ class PembelianBahanbaku extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    // FUNGSI OTOMATIS KURANGI STOK SAAT DATA DIHAPUS
+    protected static function booted()
+    {
+        static::deleting(function ($pembelian) {
+            foreach ($pembelian->detail_pembelian as $detail) {
+                // Mencari bahan berdasarkan id_bahanbaku dan mengurangi stoknya
+                \App\Models\Bahan::where('id_bahanbaku', $detail->id_bahanbaku)
+                    ->decrement('jml_stok', $detail->jumlah); 
+            }
+        });
+    }
+
     public static function generateNoFaktur()
     {
         $sql = "SELECT IFNULL(MAX(id_pembelian), 'PB-0000000') as id_pembelian FROM pembelian_bahanbaku";

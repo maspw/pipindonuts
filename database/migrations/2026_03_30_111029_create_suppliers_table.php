@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('supplier', function (Blueprint $table) {
+        // GANTI JADI 'suppliers' (tambah s) biar sinkron sama FK di pembelian
+        Schema::create('suppliers', function (Blueprint $table) {
             $table->string('id_supplier')->primary(); 
             $table->string('nama_supplier');
             $table->text('alamat');

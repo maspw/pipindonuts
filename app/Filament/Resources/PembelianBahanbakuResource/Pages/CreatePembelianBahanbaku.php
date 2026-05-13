@@ -23,8 +23,8 @@ protected function afterCreate(): void
 
     foreach ($pembelian->detail_pembelian as $detail) {
         DB::table('bahans') 
-            ->where('id', $detail->id_bahanbaku) 
-            ->increment('stok_qty', $detail->jumlah); 
+            ->where('id_bahanbaku', $detail->id_bahanbaku) 
+            ->increment('jml_stok', $detail->jumlah); 
     }
 
     try {

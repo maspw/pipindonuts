@@ -73,7 +73,7 @@ class PembelianBahanbakuResource extends Resource
                         ->schema([
                             Select::make('id_bahanbaku')
                                 ->label('Bahan Baku')
-                                ->options(Bahan::all()->pluck('nama_bahan', 'id'))
+                                ->options(Bahan::all()->pluck('nama_bahan', 'id_bahanbaku'))
                                 ->required()
                                 ->columnSpan(2)
                                 ->preload(),

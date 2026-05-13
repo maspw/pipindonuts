@@ -53,7 +53,7 @@ class SupplierResource extends Resource
                             ->tel()
                             ->required()
                             ->maxLength(20)
-                            ->placeholder(),
+                            ->placeholder('Contoh: 08123456789'), // SUDAH DIISI BIAR NGGAK ERROR
 
                         Textarea::make('alamat')
                             ->label('Alamat Lengkap')
