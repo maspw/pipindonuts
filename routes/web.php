@@ -6,6 +6,11 @@ use App\Http\Controllers\ReturPembelianController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\KasirAuthController;
 
+Route::get('/', function () {
+    return redirect()->route('kasir.index');
+    return view('welcome');
+});
+
 Route::get('/halo', function () {
     return view('welcome');
 });

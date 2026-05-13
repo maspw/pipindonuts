@@ -11,7 +11,7 @@ return new class extends Migration
         if (!Schema::hasTable('detil_pembelian')) {
             Schema::create('detil_pembelian', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('pembelian_id')->constrained('pembelian_bahanbakus')->cascadeOnDelete();
+                $table->foreignId('pembelian_id')->constrained('pembelian_bahanbaku')->onDelete('cascade');
                 $table->foreignId('bahan_id')->constrained('bahans')->cascadeOnDelete();
                 $table->integer('jumlah');
                 $table->bigInteger('harga_satuan');
