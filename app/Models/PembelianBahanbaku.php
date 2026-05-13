@@ -5,36 +5,50 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class PembelianBahanbaku extends Model
 {
     protected $table = 'pembelian_bahanbaku';
+    protected $guarded = [];
+    protected $primaryKey = 'id_pembelian'; 
+    protected $keyType = 'string';
+    public $incrementing = false;
 
-    protected $fillable = [
-        'supplier_id',
-        'karyawan_id',
-        'tgl_beli',
-        'total_beli',
-        'dokumen',
-    ];
-
-    protected $casts = [
-        'tgl_beli'   => 'date',
-        'total_beli' => 'integer',
-    ];
-
-    public function supplier(): BelongsTo
+    // FUNGSI OTOMATIS KURANGI STOK SAAT DATA DIHAPUS
+    protected static function booted()
     {
-        return $this->belongsTo(Supplier::class, 'supplier_id');
+        static::deleting(function ($pembelian) {
+            foreach ($pembelian->detail_pembelian as $detail) {
+                // Mencari bahan berdasarkan id_bahanbaku dan mengurangi stoknya
+                \App\Models\Bahan::where('id_bahanbaku', $detail->id_bahanbaku)
+                    ->decrement('jml_stok', $detail->jumlah); 
+            }
+        });
     }
 
-    public function karyawan(): BelongsTo
+    public static function generateNoFaktur()
     {
-        return $this->belongsTo(Karyawan::class, 'karyawan_id', 'id_karyawan');
+        $sql = "SELECT IFNULL(MAX(id_pembelian), 'PB-0000000') as id_pembelian FROM pembelian_bahanbaku";
+        $kodefaktur = DB::select($sql);
+        $kd = $kodefaktur[0]->id_pembelian ?? 'PB-0000000';
+        $noawal = substr($kd, -7);
+        $noakhir = (int)$noawal + 1;
+        return 'PB-' . str_pad($noakhir, 7, "0", STR_PAD_LEFT);
     }
 
-    public function detilPembelian(): HasMany
-    {
-        return $this->hasMany(DetilPembelian::class, 'pembelian_id');
+    public function detail_pembelian(): HasMany 
+    { 
+        return $this->hasMany(DetailPembelian::class, 'id_pembelian', 'id_pembelian'); 
+    }
+
+    public function supplier(): BelongsTo 
+    { 
+        return $this->belongsTo(Supplier::class, 'id_supplier', 'id_supplier'); 
+    }
+
+    public function karyawan(): BelongsTo 
+    { 
+        return $this->belongsTo(Karyawan::class, 'id_karyawan', 'id_karyawan'); 
     }
 }

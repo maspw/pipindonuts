@@ -19,7 +19,8 @@ Route::get('/supplier', [SupplierController::class, 'index']);
 Route::get('/supplier/create', [SupplierController::class, 'create']);
 Route::post('/supplier', [SupplierController::class, 'store']);
 Route::get('/depan', [App\Http\Controllers\KeranjangController::class, 'daftarbarang'])
-    ->middleware('customer')
+
+    ->middleware('customer') 
     ->name('depan');
 
 // Export routes (proteksi auth)
@@ -30,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('retur.export.csv');
 });
 
-// ── KASIR — Login & Logout (tidak butuh auth) ──────────────────────────
+// ── KASIR — Login & Logout (tidak butuh auth)
 Route::prefix('kasir')->name('kasir.')->group(function () {
     Route::get('/login', [KasirAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [KasirAuthController::class, 'login'])->name('login.post');
@@ -44,3 +45,4 @@ Route::middleware(['kasir'])->prefix('kasir')->name('kasir.')->group(function ()
     Route::get('/struk/{id}', [KasirController::class, 'struk'])->name('struk');
     Route::post('/midtrans/token', [KasirController::class, 'midtransToken'])->name('midtrans.token');
 });
+ 

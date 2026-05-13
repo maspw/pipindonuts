@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PembelianBahanbakuResource\Pages;
 
 use App\Filament\Resources\PembelianBahanbakuResource;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPembelianBahanbakus extends ListRecords
@@ -12,7 +13,7 @@ class ListPembelianBahanbakus extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            \Filament\Actions\CreateAction::make()->label('Catat Pembelian Baru'),
+            Actions\CreateAction::make(),
         ];
     }
 }

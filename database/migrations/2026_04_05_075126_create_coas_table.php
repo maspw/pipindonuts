@@ -11,7 +11,7 @@ return new class extends Migration //membuat tabel db
      */
     public function up(): void //berjalan saat php artisan migrate
     {
-        Schema::create('Coa', function (Blueprint $table) {
+        Schema::create('coa', function (Blueprint $table) {
             $table->id();
             $table->string('kode_akun');
             $table->string('nama_akun');
