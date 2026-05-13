@@ -2,14 +2,14 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Schema; //import library biar migration bisa
 
-return new class extends Migration
+return new class extends Migration //membuat tabel db
 {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up(): void //berjalan saat php artisan migrate
     {
         Schema::create('Coa', function (Blueprint $table) {
             $table->id();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('barang');
+        Schema::dropIfExists('Coa');
     }
 };
