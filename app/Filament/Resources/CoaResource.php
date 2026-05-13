@@ -18,9 +18,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CoaResource extends Resource
+class CoaResource extends Resource //file ini penngatur crud tabel coa di filament
 {
-    protected static ?string $model = Coa::class;
+    protected static ?string $model = Coa::class; //model terhubung ke coa
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
@@ -34,46 +34,51 @@ class CoaResource extends Resource
 
     protected static ?int $navigationSort = 6;
 
-    public static function form(Form $form): Form
+    public static function form(Form $form): Form //mengatur tampilan form
     {
         return $form
             ->schema([
                 //isikan dengan input type form
-                Grid::make(1) // Membuat hanya 1 kolom
-                ->schema([
-                    TextInput::make('kode_akun')
-                        ->required()
-                        ->placeholder('Masukkan kode akun')
-                    ,
-                    TextInput::make('nama_akun')
-                        ->autocapitalize('words')
-                        ->label('Nama akun')
-                        ->required()
-                        ->placeholder('Masukkan nama akun')
-                    ,
-                ]),
+                Grid::make(1)
+    ->schema([
+
+        TextInput::make('kode_akun')
+            ->required()
+            ->placeholder('Masukkan kode akun'),
+
+        TextInput::make('nama_akun')
+            ->autocapitalize('words')
+            ->label('Nama akun')
+            ->required()
+            ->placeholder('Masukkan nama akun'),
+
+        Forms\Components\Select::make('header_akun')
+            ->options([
+                'Aset' => 'Aset',
+                'Utang' => 'Utang',
+                'Modal' => 'Modal',
+                'Pendapatan' => 'Pendapatan',
+                'Beban' => 'Beban',
+            ])
+            ->required(),
+
+    ]),
             ]);
     }
 
-    public static function table(Table $table): Table
+    public static function table(Table $table): Table //mengatur tampilan tabel di admin
     {
         return $table
             ->columns([
-                //isikan kolom mana saja yang akan ditampilkan di sin
-                TextColumn::make('kode_akun'),
-                TextColumn::make('nama_akun'), 
-            ])
-            ->filters([
-                //untuk membuat filter 
-                Tables\Filters\SelectFilter::make('header_akun')
-                    ->options([
-                        1 => 'Aset/Aktiva',
-                        2 => 'Utang',
-                        3 => 'Modal',
-                        4 => 'Pendapatan',
-                        5 => 'Beban',
-                    ]),
-            ])
+
+    TextColumn::make('kode_akun'),
+
+    TextColumn::make('nama_akun'),
+
+    TextColumn::make('header_akun'),
+
+])
+        
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
@@ -94,7 +99,7 @@ class CoaResource extends Resource
         ];
     }
 
-    public static function getPages(): array
+    public static function getPages(): array //mengatur halaman utama
     {
         return [
             'index' => Pages\ListCoas::route('/'),
