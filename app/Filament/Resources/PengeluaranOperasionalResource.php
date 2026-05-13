@@ -60,7 +60,7 @@ class PengeluaranOperasionalResource extends Resource
                                         ->label('ID Pengeluaran')
                                         ->default(function () {
 
-                                            $last = PengeluaranOperasional::latest()->first();
+                                            $last = PengeluaranOperasional::latest()->first(); //data terakhir
 
                                             if (!$last) {
                                                 return 'PG001';
@@ -72,9 +72,9 @@ class PengeluaranOperasionalResource extends Resource
 
                                             return 'PG' . str_pad($number, 3, '0', STR_PAD_LEFT);
                                         })
-                                        ->disabled()
-                                        ->dehydrated()
-                                        ->required(),
+                                        ->disabled()//field
+                                        ->dehydrated()  //data tetap disimpan ke db
+                                        ->required(), //data wajib diisi dan tidak boleh null
 
                                     DatePicker::make('tanggal')
                                         ->required(),
@@ -87,8 +87,8 @@ class PengeluaranOperasionalResource extends Resource
                     Step::make('Data Karyawan')
                         ->schema([
 
-                            Grid::make(2)
-                                ->schema([
+                            Grid::make(2)//buat bagi 2 kolom scr horizontal
+                                ->schema([//naruh isi/komponen apa aja yang di grid (tata letak)
 
                                     Select::make('id_karyawan')
                                         ->label('ID Karyawan')
@@ -101,7 +101,7 @@ class PengeluaranOperasionalResource extends Resource
                                             $record->id_karyawan . ' - ' . $record->nama
                                         )
                                         ->searchable()
-                                        ->preload()
+                                        ->preload()//data langsung dimuat
                                         ->live()
                                         ->required(),
 
@@ -110,19 +110,19 @@ class PengeluaranOperasionalResource extends Resource
                                         ->disabled()
                                         ->dehydrated(false)
 
-                                        ->afterStateHydrated(function ($component, Get $get) {
+                                        ->afterStateHydrated(function ($component, Get $get) { //jalan saat form pertama kali dibuka (menampilkan nama otomatis)
 
-                                            $karyawan = Karyawan::where(
+                                            $karyawan = Karyawan::where( //melakukan query ke db tabel karyawan
                                                 'id_karyawan',
-                                                $get('id_karyawan')
-                                            )->first();
+                                                $get('id_karyawan')//mengambil nilai id karyawan yang dipilih
+                                            )->first(); //mengambil satu baris pertama yang cocok
 
                                             if ($karyawan) {
-                                                $component->state($karyawan->nama);
+                                                $component->state($karyawan->nama); //sistem mengisi kolom kode dengan nama karyawan
                                             }
                                         })
 
-                                        ->afterStateUpdated(function ($component, Get $get) {
+                                        ->afterStateUpdated(function ($component, Get $get) {//berjalan saat karyawan diganti
 
                                             $karyawan = Karyawan::where(
                                                 'id_karyawan',
@@ -182,7 +182,7 @@ class PengeluaranOperasionalResource extends Resource
 
                                 ]),
 
-                            Textarea::make('keterangan')
+                            Textarea::make('keterangan')//input catatan tambahan
                                 ->rows(4)
                                 ->columnSpanFull(),
 
@@ -190,18 +190,6 @@ class PengeluaranOperasionalResource extends Resource
 
                 ])
 
-                    ->submitAction(
-
-    new \Illuminate\Support\HtmlString('
-        <button
-            type="submit"
-            class="fi-btn fi-btn-size-md inline-flex items-center justify-center gap-1 rounded-lg bg-success-600 px-4 py-2 text-sm font-semibold text-white shadow-sm"
-        >
-            Create
-        </button>
-    ')
-
-)
 
                     ->columnSpanFull()
 
@@ -217,7 +205,7 @@ class PengeluaranOperasionalResource extends Resource
                 TextColumn::make('id_pengeluaran')
                     ->label('ID Pengeluaran')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable(),//bisa diurutkan
 
                 TextColumn::make('karyawan.id_karyawan')
                     ->label('ID Karyawan')
@@ -239,7 +227,7 @@ class PengeluaranOperasionalResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('status')
-                    ->badge()
+                    ->badge()//label mempercantik tampilan status
                     ->color(fn (string $state): string => match ($state) {
 
                         'Bayar' => 'success',
@@ -251,7 +239,7 @@ class PengeluaranOperasionalResource extends Resource
                     }),
 
                 TextColumn::make('keterangan')
-                    ->limit(30),
+                    ->limit(30),//membatasi jumlah karaternya
 
             ])
 
@@ -260,7 +248,7 @@ class PengeluaranOperasionalResource extends Resource
             ])
 
             // BULK ACTIONS
-            ->bulkActions([
+            ->bulkActions([//action buat banyak data sekaligus
 
     Tables\Actions\BulkActionGroup::make([
 
@@ -273,7 +261,7 @@ Tables\Actions\BulkAction::make('Email')
 
     ->action(function ($records) {
 
-        foreach ($records as $record) {
+        foreach ($records as $record) { //buat ngeloop semua data yang dicentang
 
             Mail::to(
                 'triafrisadarmayani@gmail.com'
@@ -282,7 +270,7 @@ Tables\Actions\BulkAction::make('Email')
             );
 
             // DELAY
-            sleep(5);
+            sleep(5);//Supaya Mailtrap tidak error “Too many emails per second”
 
         }
 
@@ -302,12 +290,12 @@ Tables\Actions\BulkAction::make('Email')
 
             ->action(function ($records) {
 
-                $pdf = Pdf::loadView(
+                $pdf = Pdf::loadView(//mengubah blade menjadi pdf
                     'pdf.pengeluaran-operasional',
                     ['data' => $records]
                 );
 
-                return response()->streamDownload(
+                return response()->streamDownload(//download file pdf
                     fn () => print($pdf->output()),
                     'pengeluaran-operasional.pdf'
                 );
@@ -322,7 +310,7 @@ Tables\Actions\BulkAction::make('Email')
 
             ->action(function ($records) {
 
-                return Excel::download(
+                return Excel::download(//download file excel
                     new PengeluaranOperasionalExport($records),
                     'pengeluaran-operasional.xlsx'
                 );

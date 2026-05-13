@@ -25,18 +25,18 @@ return new class extends Migration
             $table->string('nama_pengeluaran');
 
             // nominal
-            $table->bigInteger('nominal');
+            $table->bigInteger('nominal');//utk angka besar/rupiah
 
             // keterangan
             $table->text('keterangan')->nullable();
 
-            $table->timestamps();
+            $table->timestamps();//created at/updated at
 
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('pengeluaran_operasionals');
+        Schema::dropIfExists('pengeluaran_operasionals');// perintah untuk menghapus tabel
     }
 };

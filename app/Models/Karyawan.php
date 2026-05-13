@@ -26,7 +26,7 @@ class Karyawan extends Model
     // Relasi ke Pengeluaran Operasional
     public function pengeluaranOperasional()
     {
-        return $this->hasMany(
+        return $this->hasMany(//1 karyawan punya banyak pengeluaran.
             PengeluaranOperasional::class,
             'id_karyawan',
             'id_karyawan'

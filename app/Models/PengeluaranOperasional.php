@@ -8,8 +8,8 @@ class PengeluaranOperasional extends Model
 {
     protected $table = 'pengeluaran_operasionals';
 
-    protected $guarded = [];
-    protected $fillable = [
+    protected $guarded = [];//semua field boleh diisi
+    protected $fillable = [//field yang disimpan apa aja
     'id_pengeluaran',
     'tanggal',
     'id_karyawan',
@@ -22,7 +22,7 @@ class PengeluaranOperasional extends Model
     // Relasi ke Karyawan
     public function karyawan()
     {
-        return $this->belongsTo(
+        return $this->belongsTo(//Relasi pengeluaran → karyawan, 1 pengeluaran dimiliki 1 karyawan.
             Karyawan::class,
             'id_karyawan',
             'id_karyawan'

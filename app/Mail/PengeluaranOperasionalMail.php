@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailable;//class email laravel
 
 class PengeluaranOperasionalMail extends Mailable
 {
@@ -16,7 +16,7 @@ class PengeluaranOperasionalMail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Pengeluaran Operasional')
-            ->view('emails.pengeluaran-operasional');
+            ->subject('Pengeluaran Operasional')//mgnkn subect email
+            ->view('emails.pengeluaran-operasional');//mgnkn blade email
     }
 }
