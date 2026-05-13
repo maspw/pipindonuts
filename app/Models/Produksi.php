@@ -56,10 +56,10 @@ class Produksi extends Model
             'id_karyawan'  // Primary Key di tabel karyawan
         );
     }
-    
-    public function detailBahanProduksi()
-    {
+    // Tambahkan ini di dalam class Produksi
+public function detailBahanProduksi()
+{
     // Sesuaikan nama class Model detailmu
-        return $this->hasMany(DetailBahanProduksi::class, 'id_produksi', 'id_produksi');
-    }
+    return $this->hasMany(DetailBahanProduksi::class, 'id_produksi', 'id_produksi');
+}
 }
