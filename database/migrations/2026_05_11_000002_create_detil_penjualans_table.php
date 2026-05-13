@@ -8,15 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (!Schema::hasTable('detil_pembelian')) {
-            Schema::create('detil_pembelian', function (Blueprint $table) {
+        if (!Schema::hasTable('detil_penjualans')) {
+            Schema::create('detil_penjualans', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('pembelian_id')->constrained('pembelian_bahanbaku')->onDelete('cascade');
-                $table->foreignId('bahan_id')->constrained('bahans')->cascadeOnDelete();
+                $table->unsignedBigInteger('penjualan_id');
+                $table->unsignedBigInteger('produk_id');
                 $table->integer('jumlah');
                 $table->bigInteger('harga_satuan');
                 $table->bigInteger('sub_total');
-                $table->date('tgl_kadaluarsa')->nullable();
                 $table->timestamps();
             });
         }
@@ -24,6 +23,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('detil_pembelian');
+        Schema::dropIfExists('detil_penjualans');
     }
 };

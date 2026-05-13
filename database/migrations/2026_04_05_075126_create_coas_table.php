@@ -24,6 +24,6 @@ return new class extends Migration //membuat tabel db
      */
     public function down(): void
     {
-        Schema::dropIfExists('barang');
+        Schema::dropIfExists('Coa');
     }
 };

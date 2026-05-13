@@ -94,9 +94,9 @@ class PembelianBahanbakuResource extends Resource
                                     ->afterStateUpdated(function (Get $get, Set $set) {
                                         $bahan = Bahan::find($get('bahan_id'));
                                         if ($bahan) {
-                                            $set('jumlah', $bahan->stok_qty);
+                                            $set('jumlah', $bahan->jml_stok);
                                             $harga = (int) $get('harga_satuan') ?: 0;
-                                            $set('sub_total', $bahan->stok_qty * $harga);
+                                            $set('sub_total', $bahan->jml_stok * $harga);
                                         } else {
                                             $set('jumlah', null);
                                             $set('sub_total', 0);
@@ -207,7 +207,7 @@ class PembelianBahanbakuResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('detil_pembelian_count')
-                    ->label('Jml Item')
+                    ->label('Jenis Bahan')
                     ->counts('detilPembelian')
                     ->badge()
                     ->color('info'),

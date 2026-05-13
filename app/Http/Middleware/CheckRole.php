@@ -15,9 +15,9 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next): Response
 {
-    if (auth()->check() && auth()->user()->user_group === 'Kasir') {
+    if (auth()->check() && in_array(auth()->user()->user_group, ['Kasir', 'Admin'])) {
         return $next($request);
     }
-    return abort(403, 'Gak ada akses, Pip!');
+    return redirect()->route('kasir.login')->with('error', 'Silakan login sebagai Kasir terlebih dahulu.');
 }
 }

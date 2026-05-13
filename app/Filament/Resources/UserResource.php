@@ -54,7 +54,7 @@ class UserResource extends Resource
                 ->badge()
                 ->color(fn (string $state): string => match ($state) {
                     'Admin' => 'danger', 
-                    'Kasir' => 'success',
+                    'Kasir' => 'success', 
                     default => 'gray',
                 }),
             ])
@@ -78,7 +78,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            
         ];
     }
 
