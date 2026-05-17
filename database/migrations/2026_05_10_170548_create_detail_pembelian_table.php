@@ -13,12 +13,15 @@ return new class extends Migration
 {
     Schema::create('detail_pembelian', function (Blueprint $table) {
         $table->id();
-        $table->string('id_pembelian'); 
-        $table->foreign('id_pembelian')
-              ->references('id_pembelian') 
-              ->on('pembelian_bahanbaku')  
+
+        // FK ke pembelian_bahanbaku.id_pembelian (string PK)
+        $table->string('pembelian_id');
+        $table->foreign('pembelian_id')
+              ->references('id_pembelian')
+              ->on('pembelian_bahanbaku')
               ->onDelete('cascade');
-        $table->string('id_bahanbaku'); 
+
+        $table->string('id_bahanbaku');
         $table->integer('jumlah');
         $table->decimal('harga_satuan', 15, 2);
         $table->decimal('subtotal', 15, 2);

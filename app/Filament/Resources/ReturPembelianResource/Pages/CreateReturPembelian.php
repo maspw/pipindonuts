@@ -36,7 +36,7 @@ class CreateReturPembelian extends CreateRecord
                             PembelianBahanbaku::with('supplier')
                                 ->get()
                                 ->mapWithKeys(fn ($p) => [
-                                    $p->id => '#' . $p->id
+                                    $p->id_pembelian => '#' . $p->id_pembelian
                                         . ' — ' . ($p->supplier?->nama_supplier ?? '?')
                                         . ' (' . $p->tgl_beli?->format('d M Y') . ')'
                                         . ' | Total: Rp ' . number_format($p->total_beli, 0, ',', '.'),
@@ -64,7 +64,7 @@ class CreateReturPembelian extends CreateRecord
                                 ->with('bahan')
                                 ->get()
                                 ->mapWithKeys(fn ($d) => [
-                                    $d->bahan_id => ($d->bahan?->nama_bahan ?? '?')
+                                    $d->id_bahanbaku => ($d->bahan?->nama_bahan ?? '?')
                                         . ' — ' . $d->jumlah . ' ' . ($d->bahan?->satuan ?? ''),
                                 ]);
                         })
