@@ -8,6 +8,11 @@ use App\Http\Controllers\KasirAuthController;
 
 Route::get('/', function () {
     return redirect()->route('kasir.index');
+    return view('welcome');
+});
+
+Route::get('/halo', function () {
+    return view('welcome');
 });
 
 Route::get('/supplier', [SupplierController::class, 'index']);
