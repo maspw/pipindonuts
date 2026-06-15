@@ -13,23 +13,12 @@ class EditPenjualanProduk extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make()->label('Hapus Transaksi'),
+            Actions\DeleteAction::make(),
         ];
     }
 
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
-    }
-
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        // Hitung ulang total_jual dari detil
-        $total = collect($data['detil'] ?? [])->sum(fn ($d) => (int) ($d['sub_total'] ?? 0));
-        if ($total > 0) {
-            $data['total_jual'] = $total;
-        }
-
-        return $data;
     }
 }

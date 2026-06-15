@@ -15,6 +15,10 @@ class PembelianBahanbaku extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $casts = [
+        'tgl_beli' => 'datetime',
+    ];
+
     // FUNGSI OTOMATIS KURANGI STOK SAAT DATA DIHAPUS
     protected static function booted()
     {
@@ -39,11 +43,13 @@ class PembelianBahanbaku extends Model
 
     public function detail_pembelian(): HasMany 
     { 
-        return $this->hasMany(DetailPembelian::class, 'id_pembelian', 'id_pembelian'); 
+        // FK di tabel detail_pembelian adalah 'pembelian_id' (bukan 'id_pembelian')
+        return $this->hasMany(DetailPembelian::class, 'pembelian_id', 'id_pembelian'); 
     }
 
     public function supplier(): BelongsTo 
     { 
+        // kolom di DB: id_supplier (string) → suppliers.id_supplier
         return $this->belongsTo(Supplier::class, 'id_supplier', 'id_supplier'); 
     }
 

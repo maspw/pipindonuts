@@ -83,14 +83,14 @@ class PembelianBahanbakuResource extends Resource
                                 ->prefix('Rp')
                                 ->required()
                                 ->live(onBlur: true)
-                                ->afterStateUpdated(fn ($state, $set, $get) => $set('subtotal', $state * $get('jumlah'))),
+                                ->afterStateUpdated(fn ($state, $set, $get) => $set('subtotal', (float) $state * (float) $get('jumlah'))),
                             TextInput::make('jumlah')
                                 ->label('Qty')
                                 ->numeric()
                                 ->default(1)
                                 ->required()
                                 ->live(onBlur: true)
-                                ->afterStateUpdated(fn ($state, $set, $get) => $set('subtotal', $state * $get('harga_satuan'))),
+                                ->afterStateUpdated(fn ($state, $set, $get) => $set('subtotal', (float) $state * (float) $get('harga_satuan'))),
                             TextInput::make('subtotal')
                                 ->label('Subtotal')
                                 ->numeric()

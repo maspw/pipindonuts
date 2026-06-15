@@ -5,18 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class DetailPembelian extends Model
+/**
+ * Model DetilPembelian — alias untuk tabel detail_pembelian.
+ * Digunakan oleh ReturPembelianResource untuk melihat bahan
+ * yang ada dalam suatu transaksi pembelian.
+ */
+class DetilPembelian extends Model
 {
     protected $table = 'detail_pembelian';
-    protected $guarded = [];
-    
-    public function bahanbaku(): BelongsTo
+
+    protected $fillable = [
+        'pembelian_id',
+        'id_bahanbaku',
+        'jumlah',
+        'harga_satuan',
+        'subtotal',
+    ];
+
+    public function bahan(): BelongsTo
     {
         return $this->belongsTo(Bahan::class, 'id_bahanbaku', 'id_bahanbaku');
     }
+
     public function pembelian(): BelongsTo
     {
-        // local key di detail_pembelian = 'pembelian_id'
         return $this->belongsTo(PembelianBahanbaku::class, 'pembelian_id', 'id_pembelian');
     }
 }
