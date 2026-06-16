@@ -14,7 +14,6 @@
 :root{--bg:#0d0f14;--surface:#161b27;--surface2:#1e2535;--border:#2a3145;--accent:#f97316;--accent-hover:#ea6c0a;--text:#e8eaf0;--muted:#8892a4;--success:#22c55e;--danger:#ef4444;--radius:12px}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
 
-/* ── TOP BAR ── */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);height:60px;flex-shrink:0}
 .topbar-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:var(--accent)}
 .topbar-logo span{font-size:22px}
@@ -22,10 +21,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .topbar-info strong{color:var(--text)}
 .topbar-time{font-size:14px;font-weight:600;color:var(--text);background:var(--surface2);padding:6px 14px;border-radius:8px;border:1px solid var(--border)}
 
-/* ── LAYOUT ── */
 .pos-body{display:flex;height:calc(100vh - 60px)}
-
-/* ── PRODUCT PANEL ── */
 .product-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:16px}
 .search-bar{position:relative;margin-bottom:14px}
 .search-bar input{width:100%;padding:11px 16px 11px 42px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;outline:none;transition:.2s}
@@ -49,8 +45,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .product-card .stok-badge.low{background:rgba(239,68,68,.8)}
 .in-cart-badge{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 
-/* ── CART PANEL ── */
-.cart-panel{width:320px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column}
+.cart-panel{width:340px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column}
 .cart-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .cart-header h2{font-size:15px;font-weight:700}
 .cart-clear{font-size:12px;color:var(--danger);cursor:pointer;border:none;background:none;color:var(--danger);padding:4px 8px;border-radius:6px;transition:.15s}
@@ -73,7 +68,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .qty-btn:hover{border-color:var(--accent);color:var(--accent)}
 .qty-num{font-size:13px;font-weight:600;min-width:18px;text-align:center}
 
-/* ── CART FOOTER ── */
 .cart-footer{padding:14px 16px;border-top:1px solid var(--border)}
 .summary-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
 .summary-total{display:flex;justify-content:space-between;font-size:17px;font-weight:800;color:var(--text);margin:10px 0}
@@ -82,22 +76,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .pay-btn:hover{background:var(--accent-hover);transform:translateY(-1px)}
 .pay-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none}
 
-/* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(4px)}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:420px;max-width:90vw;overflow:hidden}
-.modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:440px;max-width:95vw;max-height:90vh;overflow-y:auto}
+.modal::-webkit-scrollbar{width:4px}
+.modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:2}
 .modal-head h3{font-size:16px;font-weight:700}
 .modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;line-height:1}
 .modal-body{padding:24px}
-.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;position:sticky;bottom:0;background:var(--surface);z-index:2}
 
-/* Form elements */
 .field-label{font-size:12px;color:var(--muted);margin-bottom:6px;display:block;font-weight:500}
 .field-input{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;outline:none;transition:.2s;font-family:inherit}
 .field-input:focus{border-color:var(--accent)}
 .mb-16{margin-bottom:16px}
 
-/* Payment method toggle */
 .pay-methods{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
 .pay-method{padding:10px;border:1px solid var(--border);border-radius:10px;cursor:pointer;text-align:center;transition:.15s;background:var(--surface2)}
 .pay-method:hover{border-color:var(--accent)}
@@ -105,19 +98,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .pay-method .icon{font-size:20px;margin-bottom:4px}
 .pay-method .label{font-size:11px;font-weight:600}
 
-/* Change display */
 .change-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;margin-top:12px}
 .change-box .change-label{font-size:11px;color:var(--muted);margin-bottom:4px}
 .change-box .change-value{font-size:22px;font-weight:800;color:var(--success)}
 .change-box .change-value.minus{color:var(--danger)}
 
-/* Quick cash buttons */
 .quick-cash{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
 .quick-btn{padding:7px 4px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:.15s;font-family:inherit}
 .quick-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(249,115,22,.08)}
 .quick-btn.exact{border-color:var(--success);color:var(--success)}
 
-/* Buttons */
 .btn{padding:11px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.15s;font-family:inherit}
 .btn-primary{background:var(--accent);color:#fff;flex:1}
 .btn-primary:hover{background:var(--accent-hover)}
@@ -125,17 +115,27 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 .btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 
-/* Notification */
 .notif{position:fixed;top:16px;right:16px;background:var(--success);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:200;animation:slideIn .3s ease}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-/* No results */
 .no-results{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px;font-size:14px}
+
+/* ── REKOMENDASI DI MODAL ── */
+.modal-recommendation{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:16px}
+.modal-recommendation .label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px}
+.modal-recommendation .items{display:flex;flex-direction:column;gap:6px}
+.modal-recommendation .rec-item{display:flex;align-items:center;gap:10px;background:var(--surface);padding:6px 10px;border-radius:8px;border:1px solid var(--border);transition:border-color .15s}
+.modal-recommendation .rec-item:hover{border-color:var(--accent)}
+.modal-recommendation .rec-item .thumb{width:40px;height:40px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--surface)}
+.modal-recommendation .rec-item .info{flex:1;min-width:0}
+.modal-recommendation .rec-item .name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modal-recommendation .rec-item .price{font-size:11px;color:var(--accent);font-weight:600}
+.modal-recommendation .rec-item .plus-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--accent);background:rgba(249,115,22,.1);color:var(--accent);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.modal-recommendation .rec-item .plus-btn:hover{background:var(--accent);color:#fff}
 </style>
 </head>
 <body x-data="kasir()" x-init="startClock()">
 
-{{-- ── TOP BAR ── --}}
 <div class="topbar">
     <div class="topbar-logo">
         <span>🍩</span> Pipindonuts <span style="font-weight:400;color:var(--muted);font-size:14px;margin-left:4px">/ Kasir</span>
@@ -150,10 +150,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
     </div>
 </div>
 
-{{-- ── MAIN BODY ── --}}
 <div class="pos-body">
-
-    {{-- ── PRODUCT PANEL ── --}}
     <main class="product-panel">
         <div class="search-bar">
             <span class="icon">🔍</span>
@@ -189,7 +186,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
         </div>
     </main>
 
-    {{-- ── CART PANEL ── --}}
     <aside class="cart-panel">
         <div class="cart-header">
             <h2>🛒 Pesanan</h2>
@@ -241,7 +237,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
     </aside>
 </div>
 
-{{-- ── PAYMENT MODAL ── --}}
+{{-- ── MODAL PEMBAYARAN ── --}}
 <div class="modal-overlay" x-show="showPayment" x-transition @click.self="showPayment = false">
     <div class="modal">
         <div class="modal-head">
@@ -249,6 +245,30 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
             <button class="modal-close" @click="showPayment = false">✕</button>
         </div>
         <div class="modal-body">
+            {{-- REKOMENDASI MUNCUL DI SINI (SETELAH KLIK BAYAR) --}}
+            <template x-if="getRecommendations().length > 0">
+                <div class="modal-recommendation">
+                    <div class="label">💡 Mungkin Anda Juga Minat?</div>
+                    <div class="items">
+                        <template x-for="rec in getRecommendations()" :key="rec.id_produk">
+                            <div class="rec-item">
+                                <template x-if="rec.gambar">
+                                    <img class="thumb" :src="'{{ asset('storage') }}/' + rec.gambar" :alt="rec.nama_produk">
+                                </template>
+                                <template x-if="!rec.gambar">
+                                    <div class="thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--surface)">🍩</div>
+                                </template>
+                                <div class="info">
+                                    <div class="name" x-text="rec.nama_produk"></div>
+                                    <div class="price" x-text="'Rp ' + formatRp(rec.harga)"></div>
+                                </div>
+                                <button class="plus-btn" @click="addToCart({ id: rec.id_produk, nama: rec.nama_produk, harga: rec.harga, stok: rec.stok, gambar: rec.gambar ? '{{ asset('storage') }}/' + rec.gambar : '' }); $dispatch('notification', { message: rec.nama_produk + ' ditambahkan!', type: 'success' })">+</button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
             {{-- Metode Bayar --}}
             <label class="field-label">Metode Pembayaran</label>
             <div class="pay-methods mb-16">
@@ -262,13 +282,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
                 </div>
             </div>
 
-            {{-- Total --}}
             <div class="summary-row mb-16" style="font-size:15px;font-weight:700;color:var(--text)">
                 <span>Total Tagihan</span>
                 <span style="color:var(--accent)" x-text="'Rp ' + formatRp(total)"></span>
             </div>
 
-            {{-- Tunai: input + nominal cepat + kembalian --}}
             <template x-if="metodeBayar === 'tunai'">
                 <div class="mb-16">
                     <label class="field-label">Uang Diterima dari Customer</label>
@@ -279,7 +297,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
                             placeholder="0">
                     </div>
 
-                    {{-- Tombol nominal cepat --}}
                     <div class="quick-cash">
                         <template x-for="nom in [1000,2000,5000,10000,20000,50000,100000]" :key="nom">
                             <button type="button" class="quick-btn"
@@ -295,7 +312,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
                         </button>
                     </div>
 
-                    {{-- Kotak kembalian --}}
                     <div class="change-box">
                         <div class="change-label">💵 Kembalian</div>
                         <div class="change-value" :class="{ minus: kembalian < 0 }"
@@ -321,8 +337,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
         <div class="modal-foot">
             <button class="btn btn-secondary" @click="showPayment = false">Batal</button>
-
-            {{-- QRIS: lewat Midtrans Snap --}}
             <template x-if="metodeBayar === 'qris'">
                 <button class="btn btn-primary" style="flex:1"
                     :disabled="loadingQris"
@@ -335,7 +349,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
     </div>
 </div>
 
-{{-- Error notification --}}
 @if(session('error'))
 <div class="notif" style="background:var(--danger)" x-data x-init="setTimeout(() => $el.remove(), 3000)">
     ⚠️ {{ session('error') }}
@@ -352,6 +365,7 @@ function kasir() {
         metodeBayar: 'tunai',
         jumlahBayar: 0,
         loadingQris: false,
+        rulesData: @json($rules ?? []),
 
         get total() {
             return this.cart.reduce((s, i) => s + i.harga * i.qty, 0);
@@ -370,6 +384,8 @@ function kasir() {
             } else {
                 this.cart.push({ ...produk, qty: 1 });
             }
+            // Recalculate total
+            this.$forceUpdate();
         },
         incQty(id) {
             const item = this.cart.find(i => i.id === id);
@@ -394,6 +410,42 @@ function kasir() {
             this.showPayment = true;
         },
 
+        getRecommendations() {
+            if (this.cart.length === 0 || !this.rulesData || this.rulesData.length === 0) return [];
+            
+            const cartNames = this.cart.map(item => item.nama);
+            const recommendations = [];
+            const seenProducts = new Set();
+            
+            this.rulesData.forEach(rule => {
+                const antecedent = rule.antecedent || [];
+                const consequent = rule.consequent || [];
+                const consequentProducts = rule.consequent_products || [];
+                
+                // Cek apakah semua antecedent ada di cart
+                const match = antecedent.every(item => cartNames.includes(item));
+                
+                if (match) {
+                    consequentProducts.forEach((prod, index) => {
+                        if (!prod) return;
+                        const nama = consequent[index] || '';
+                        if (!cartNames.includes(nama) && !seenProducts.has(nama)) {
+                            seenProducts.add(nama);
+                            recommendations.push({
+                                id_produk: prod.id_produk,
+                                nama_produk: prod.nama_produk || nama,
+                                harga: prod.harga || 0,
+                                gambar: prod.gambar || null,
+                                stok: prod.stok || 0,
+                            });
+                        }
+                    });
+                }
+            });
+            
+            return recommendations.slice(0, 5);
+        },
+
         async bayarQris() {
             this.loadingQris = true;
             try {
@@ -412,28 +464,26 @@ function kasir() {
                     return;
                 }
 
-                // Buka Midtrans Snap popup
-                const cart    = JSON.stringify(this.cart);
+                const cart = JSON.stringify(this.cart);
                 const orderId = data.order_id;
 
                 window.snap.pay(data.token, {
                     onSuccess: () => {
-                        // Buat form dengan DOM API agar JSON tidak rusak oleh tanda kutip
                         const form = document.createElement('form');
                         form.method = 'POST';
                         form.action = '{{ route("kasir.transaksi") }}';
 
                         const fields = {
-                            '_token'      : '{{ csrf_token() }}',
-                            'cart'        : cart,
+                            '_token': '{{ csrf_token() }}',
+                            'cart': cart,
                             'metode_bayar': 'qris',
                             'jumlah_bayar': String(this.total),
                         };
 
                         Object.entries(fields).forEach(([name, value]) => {
                             const input = document.createElement('input');
-                            input.type  = 'hidden';
-                            input.name  = name;
+                            input.type = 'hidden';
+                            input.name = name;
                             input.value = value;
                             form.appendChild(input);
                         });

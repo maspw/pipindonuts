@@ -9,6 +9,8 @@ use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use Phpml\Association\Apriori;
 
 class KasirController extends Controller
 {
@@ -18,7 +20,89 @@ class KasirController extends Controller
     public function index()
     {
         $produk = Produk::where('stok', '>', 0)->orderBy('nama_produk')->get();
-        return view('kasir.index', compact('produk'));
+        
+        // Ambil association rules (cache 1 jam)
+        $rules = Cache::remember('association_rules', 3600, function() {
+            return $this->getAssociationRules();
+        });
+        
+        return view('kasir.index', compact('produk', 'rules'));
+    }
+
+    /**
+     * Ambil association rules dari data transaksi.
+     */
+    private function getAssociationRules()
+    {
+        // Ambil data transaksi dari database dengan informasi produk lengkap
+        $data = DB::table('penjualan_produks')
+            ->join('detil_penjualans', 'penjualan_produks.id_penjualan', '=', 'detil_penjualans.id_penjualan')
+            ->join('produk', 'detil_penjualans.produk_id', '=', 'produk.id_produk')
+            ->select(
+                'penjualan_produks.id_penjualan as transaksi_id',
+                'produk.nama_produk',
+                'produk.id_produk',
+                'produk.harga',
+                'produk.gambar',
+                'produk.stok'
+            )
+            ->orderBy('penjualan_produks.id_penjualan')
+            ->get();
+
+        // Kelompokkan produk per transaksi
+        $transaksi = [];
+        $produkMap = [];
+
+        foreach ($data as $row) {
+            $transaksi[$row->transaksi_id][] = $row->nama_produk;
+            $produkMap[$row->nama_produk] = [
+                'id_produk' => $row->id_produk,
+                'nama_produk' => $row->nama_produk,
+                'harga' => $row->harga,
+                'gambar' => $row->gambar,
+                'stok' => $row->stok,
+            ];
+        }
+
+        $samples = array_values($transaksi);
+
+        // Filter transaksi dengan minimal 2 produk
+        $samples = array_filter($samples, function($items) {
+            return count($items) > 1;
+        });
+
+        $samples = array_values($samples);
+
+        // Jika tidak ada data, return kosong
+        if (empty($samples)) {
+            return [];
+        }
+
+        // Training Apriori
+        $associator = new Apriori(0.1, 0.3);
+        $associator->train($samples, []);
+
+        $rules = $associator->getRules();
+        $result = [];
+
+        foreach ($rules as $rule) {
+            // $rule adalah array, bukan object!
+            $antecedent = $rule['antecedent'] ?? [];
+            $consequent = $rule['consequent'] ?? [];
+
+            $result[] = [
+                'antecedent' => $antecedent,
+                'consequent' => $consequent,
+                'confidence' => $rule['confidence'] ?? 0,
+                'support' => $rule['support'] ?? 0,
+                'lift' => $rule['lift'] ?? 0,
+                'consequent_products' => array_map(function($name) use ($produkMap) {
+                    return $produkMap[$name] ?? null;
+                }, $consequent),
+            ];
+        }
+
+        return $result;
     }
 
     /**
@@ -77,6 +161,9 @@ class KasirController extends Controller
             ]);
 
             DB::commit();
+
+            // Hapus cache rules setelah transaksi baru
+            Cache::forget('association_rules');
 
             return redirect()->route('kasir.struk', $penjualan->id_penjualan);
         } catch (\Exception $e) {
@@ -138,5 +225,13 @@ class KasirController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
-}
 
+    /**
+     * Refresh association rules (manual).
+     */
+    public function refreshRules()
+    {
+        Cache::forget('association_rules');
+        return redirect()->back()->with('success', 'Rules berhasil di-refresh!');
+    }
+}
