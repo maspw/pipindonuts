@@ -54,6 +54,9 @@ class AdminPanelProvider extends PanelProvider
                 PenjualanDonatPerBulanChart::class,
                 ProdukTerlarisChart::class,
             ])
+            ->widgets([
+    \App\Filament\Widgets\JurnalStatsWidget::class,
+])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
