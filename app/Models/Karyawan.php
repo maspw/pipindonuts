@@ -22,7 +22,6 @@ class Karyawan extends Model
         'tanggal_masuk',
         'e_ktp',
     ];
-
     // Relasi ke Pengeluaran Operasional
     public function pengeluaranOperasional()
     {

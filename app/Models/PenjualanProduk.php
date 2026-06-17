@@ -40,7 +40,7 @@ class PenjualanProduk extends Model
         });
     }
 
-    private static function generateId(): string
+    public static function generateId(): string
     {
         $last = static::orderBy('id_penjualan', 'desc')->first();
 
@@ -51,6 +51,12 @@ class PenjualanProduk extends Model
         }
 
         return 'PJL' . str_pad($num + 1, 3, '0', STR_PAD_LEFT);
+    }
+
+    /** Alias public untuk dipanggil dari Filament Resource (form default). */
+    public static function generateIdPublic(): string
+    {
+        return static::generateId();
     }
 
     public function karyawan(): BelongsTo

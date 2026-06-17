@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // GANTI JADI 'suppliers' (tambah s) biar sinkron sama FK di pembelian
         Schema::create('suppliers', function (Blueprint $table) {
-            $table->id();
+            $table->string('id_supplier')->primary(); 
             $table->string('nama_supplier');
             $table->text('alamat');
             $table->string('no_telp');
-            $table->timestamps();
+            $table->timestamps(); 
         });
     }
 

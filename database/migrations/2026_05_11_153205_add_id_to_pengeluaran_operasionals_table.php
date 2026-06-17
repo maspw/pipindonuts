@@ -13,6 +13,11 @@ return new class extends Migration
             $table->id()->first();
 
         });
+        if (!Schema::hasColumn('pengeluaran_operasionals', 'id')) {
+            Schema::table('pengeluaran_operasionals', function (Blueprint $table) {
+                $table->id()->first();
+            });
+        }
     }
 
     public function down(): void

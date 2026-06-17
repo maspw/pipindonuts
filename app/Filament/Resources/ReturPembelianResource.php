@@ -47,7 +47,10 @@ class ReturPembelianResource extends Resource
                                 PembelianBahanbaku::with('supplier')
                                     ->get()
                                     ->mapWithKeys(fn ($p) => [
-                                        $p->id => '#' . $p->id . ' — ' . ($p->supplier?->nama_supplier ?? '?') . ' (' . $p->tgl_beli?->format('d M Y') . ')',
+                                        // $p->id_pembelian = string PK (PB-0000001, dst.)
+                                        $p->id_pembelian => '#' . $p->id_pembelian
+                                            . ' — ' . ($p->supplier?->nama_supplier ?? '?')
+                                            . ' (' . $p->tgl_beli?->format('d M Y') . ')',
                                     ])
                             )
                             ->required()
@@ -65,7 +68,9 @@ class ReturPembelianResource extends Resource
                                     ->with('bahan')
                                     ->get()
                                     ->mapWithKeys(fn ($d) => [
-                                        $d->bahan_id => $d->bahan?->nama_bahan . ' (' . $d->jumlah . ' ' . $d->bahan?->satuan . ')',
+                                        // kolom di detail_pembelian adalah 'id_bahanbaku'
+                                        $d->id_bahanbaku => ($d->bahan?->nama_bahan ?? '?')
+                                            . ' (' . $d->jumlah . ' ' . ($d->bahan?->satuan ?? '') . ')',
                                     ]);
                             })
                             ->required()

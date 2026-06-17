@@ -5,33 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Model DetilPembelian — alias untuk tabel detail_pembelian.
+ * Digunakan oleh ReturPembelianResource untuk melihat bahan
+ * yang ada dalam suatu transaksi pembelian.
+ */
 class DetilPembelian extends Model
 {
-    protected $table = 'detil_pembelian';
+    protected $table = 'detail_pembelian';
 
     protected $fillable = [
         'pembelian_id',
-        'bahan_id',
+        'id_bahanbaku',
         'jumlah',
         'harga_satuan',
-        'sub_total',
-        'tgl_kadaluarsa',
+        'subtotal',
     ];
-
-    protected $casts = [
-        'tgl_kadaluarsa' => 'date',
-        'jumlah'         => 'integer',
-        'harga_satuan'   => 'integer',
-        'sub_total'      => 'integer',
-    ];
-
-    public function pembelian(): BelongsTo
-    {
-        return $this->belongsTo(PembelianBahanbaku::class, 'pembelian_id');
-    }
 
     public function bahan(): BelongsTo
     {
-        return $this->belongsTo(Bahan::class, 'bahan_id');
+        return $this->belongsTo(Bahan::class, 'id_bahanbaku', 'id_bahanbaku');
+    }
+
+    public function pembelian(): BelongsTo
+    {
+        return $this->belongsTo(PembelianBahanbaku::class, 'pembelian_id', 'id_pembelian');
     }
 }

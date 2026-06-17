@@ -32,7 +32,7 @@ class ReturPembelian extends Model
 
     public function bahan(): BelongsTo
     {
-        return $this->belongsTo(Bahan::class, 'bahan_id');
+        return $this->belongsTo(Bahan::class, 'bahan_id', 'id_bahanbaku');
     }
 
     public function karyawan(): BelongsTo

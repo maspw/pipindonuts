@@ -12,5 +12,12 @@ class Coa extends Model //menghubungkan laravel dengan tabel database coa
     protected $table = 'coa'; //memberitahu laravel model coa memakai tabel
 
     // seluruh kolom dapat dimodifikasi
+
     protected $guarded = []; //semua tabel boleh diisi atau diubah
+    protected $guarded = [];
+    // relasi 1-n dengan jurnal_detail
+    public function journalDetail()
+    {
+        return $this->hasMany(JurnalDetail::class);
+    }
 }
