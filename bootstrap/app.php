@@ -15,7 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'customer' => CheckRole::class,
             'kasir'    => CheckRole::class,
+            'auth'     => \App\Http\Middleware\Authenticate::class,  // TAMBAH INI!
         ]);
+
+        // TAMBAH INI JUGA!
+        $middleware->redirectGuestsTo(fn () => route('kasir.login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -337,6 +337,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);heigh
 
         <div class="modal-foot">
             <button class="btn btn-secondary" @click="showPayment = false">Batal</button>
+            
+            {{-- Tombol Bayar Tunai --}}
+            <template x-if="metodeBayar === 'tunai'">
+                <button class="btn btn-primary" style="flex:1"
+                    :disabled="kembalian < 0 || cart.length === 0"
+                    @click="bayarTunai()">
+                    💵 Bayar Tunai
+                </button>
+            </template>
+            
+            {{-- Tombol Bayar QRIS --}}
             <template x-if="metodeBayar === 'qris'">
                 <button class="btn btn-primary" style="flex:1"
                     :disabled="loadingQris"
@@ -384,7 +395,6 @@ function kasir() {
             } else {
                 this.cart.push({ ...produk, qty: 1 });
             }
-            // Recalculate total
             this.$forceUpdate();
         },
         incQty(id) {
@@ -422,7 +432,6 @@ function kasir() {
                 const consequent = rule.consequent || [];
                 const consequentProducts = rule.consequent_products || [];
                 
-                // Cek apakah semua antecedent ada di cart
                 const match = antecedent.every(item => cartNames.includes(item));
                 
                 if (match) {
@@ -446,6 +455,48 @@ function kasir() {
             return recommendations.slice(0, 5);
         },
 
+        // ── BAYAR TUNAI ──
+        async bayarTunai() {
+            if (this.kembalian < 0) {
+                alert('Uang kurang!');
+                return;
+            }
+            
+            if (this.cart.length === 0) {
+                alert('Keranjang kosong!');
+                return;
+            }
+            
+            try {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ route("kasir.transaksi") }}';
+                
+                const fields = {
+                    '_token': '{{ csrf_token() }}',
+                    'cart': JSON.stringify(this.cart),
+                    'metode_bayar': 'tunai',
+                    'jumlah_bayar': String(this.jumlahBayar),
+                    'total': String(this.total)
+                };
+                
+                Object.entries(fields).forEach(([name, value]) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                });
+                
+                document.body.appendChild(form);
+                form.submit();
+                
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        },
+
+        // ── BAYAR QRIS ──
         async bayarQris() {
             this.loadingQris = true;
             try {
