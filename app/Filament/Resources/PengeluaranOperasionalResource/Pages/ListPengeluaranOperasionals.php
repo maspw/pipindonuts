@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\PengeluaranOperasionalResource\Pages;
 
 use App\Filament\Resources\PengeluaranOperasionalResource;
+use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
 use App\Models\PengeluaranOperasional;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -16,6 +18,11 @@ class ListPengeluaranOperasionals extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+
+            Actions\CreateAction::make(),
+        ];
+    }
+}
             Actions\Action::make('generate_operasional_ai_insight')
                 ->label('Generate Operasional AI Insight')
                 ->icon('heroicon-m-presentation-chart-line')
