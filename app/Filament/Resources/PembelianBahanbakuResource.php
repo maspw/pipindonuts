@@ -208,7 +208,7 @@ class PembelianBahanbakuResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
+   public static function getRelations(): array
     {
         return [];
     }
@@ -219,6 +219,14 @@ class PembelianBahanbakuResource extends Resource
             'index' => Pages\ListPembelianBahanbakus::route('/'),
             'create' => Pages\CreatePembelianBahanbaku::route('/create'),
             'edit' => Pages\EditPembelianBahanbaku::route('/{record}/edit'),
+        ];
+    }
+
+    // DI SINI KITA PANGGIL WIDGET DARI TRACK ADMIN ASLI LAPTOP KAMU
+    public static function getWidgets(): array
+    {
+        return [
+            \App\Filament\Resources\AdminResource\Widgets\PembelianOverview::class,
         ];
     }
 }
