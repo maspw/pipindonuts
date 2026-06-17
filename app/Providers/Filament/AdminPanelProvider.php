@@ -17,6 +17,12 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Filament\Resources\AdminResource\Widgets\DashboardStats;
+use App\Filament\Resources\AdminResource\Widgets\TopCustomerChart;
+use App\Filament\Resources\AdminResource\Widgets\StokBahanBakuMenipisWidget;
+use App\Filament\Resources\AdminResource\Widgets\SupplierChart;
+use App\Filament\Resources\AdminResource\Widgets\PenjualanDonatPerBulanChart;
+use App\Filament\Resources\AdminResource\Widgets\ProdukTerlarisChart;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -41,6 +47,12 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                DashboardStats::class,
+                TopCustomerChart::class,
+                StokBahanBakuMenipisWidget::class,
+                SupplierChart::class,
+                PenjualanDonatPerBulanChart::class,
+                ProdukTerlarisChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
