@@ -42,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
         // Pendaftaran seluruh Observer Transaksi Otomatis Pipin Donuts
         PengeluaranOperasional::observe(PengeluaranObserver::class);
         PembelianBahanbaku::observe(PembelianObserver::class);
+        Pembayaran::observe(PembayaranObserver::class);
         //Pembayaran::observe(PembayaranObserver::class);
         PenjualanProduk::observe(PenjualanObserver::class);
         ReturPembelian::observe(ReturObserver::class);

@@ -9,6 +9,8 @@ use App\Models\Coa;
 
 class PenjualanObserver
 {
+    public function created(PenjualanProduk $penjualan): void
+    {
     /**
      * Handle the PenjualanProduk "created" event.
      */
@@ -20,6 +22,14 @@ class PenjualanObserver
         $lastRef = Jurnal::where('no_referensi', 'LIKE', 'F0004-%')
             ->orderBy('id', 'desc')
             ->first();
+
+        $nextNum = $lastRef ? intval(substr($lastRef->no_referensi, 6)) + 1 : 1;
+        $refCode = 'F0004-' . str_pad($nextNum, 4, '0', STR_PAD_LEFT);
+
+        $baseRef = $refCode;
+
+        $piutang = Coa::where('kode_akun', '112')->first();
+        $pendapatan = Coa::where('kode_akun', '411')->first();
 
         $nextNum = $lastRef
             ? intval(substr($lastRef->no_referensi, 6)) + 1
@@ -47,6 +57,22 @@ class PenjualanObserver
             'no_referensi' => $refCode,
             'deskripsi' => 'Penjualan Produk #' . $penjualan->id_penjualan,
         ]);
+
+        // DEBIT Piutang
+        JurnalDetail::create([
+            'jurnal_id' => $jurnal->id,
+            'coa_id' => $piutang->id,
+            'debit' => $penjualan->total_jual,
+            'credit' => 0,
+            'no_referensi' => $baseRef . '-' . $piutang->kode_akun,
+        ]);
+
+        // CREDIT Pendapatan
+        JurnalDetail::create([
+            'jurnal_id' => $jurnal->id,
+            'coa_id' => $pendapatan->id,
+            'debit' => 0,
+            'credit' => $penjualan->total_jual,
 
         // =========================
         // 4. DETAIL DEBIT (KAS)

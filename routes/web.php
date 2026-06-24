@@ -5,6 +5,10 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ReturPembelianController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\KasirAuthController;
+use App\Http\Controllers\JurnalUmumController;
+// Route Jurnal Umum Otomatis Pipin Donuts
+Route::get('/laporan/jurnal-umum', [JurnalUmumController::class, 'index'])
+    ->name('laporan.jurnal_umum');
 use App\Http\Controllers\AprioriTestController;
 use Illuminate\Http\Request;
 Route::get('/apriori', [AprioriTestController::class, 'index'])->name('apriori.index');

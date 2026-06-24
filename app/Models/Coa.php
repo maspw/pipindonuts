@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory; //testing/dummy
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Coa extends Model //menghubungkan laravel dengan tabel database coa
+class Coa extends Model
 {
     // use HasFactory;
     // karena kita merubah tabelnya dari coas menjadi coa
-    protected $table = 'coa'; //memberitahu laravel model coa memakai tabel
+    protected $table = 'coa';
 
-    // seluruh kolom dapat dimodifikasi
-
+    // seluruh kolom dapat dimodifikasi<<<<<<< nadzalfa
+    protected $guarded = [];
     protected $guarded = []; //semua tabel boleh diisi atau diubah
     protected $guarded = [];
     // relasi 1-n dengan jurnal_detail
