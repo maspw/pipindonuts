@@ -32,6 +32,7 @@ class JurnalResource extends Resource
 
     // merubah icon menjadi buku terbuka
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
+    
 
     // tambahan buat label Jurnal Umum
     protected static ?string $navigationLabel = 'Jurnal Umum';

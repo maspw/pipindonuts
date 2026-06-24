@@ -17,7 +17,7 @@ class BukuBesar extends Widget
 
     public $periode_awal;
     public $periode_akhir;
-    public $coa_id; // akun yang dipilih
+    public $coa_id; 
 
     protected $listeners = ['filterUpdated' => 'getViewData'];
 
