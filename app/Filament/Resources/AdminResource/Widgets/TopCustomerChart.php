@@ -19,11 +19,10 @@ class TopCustomerChart extends ChartWidget
     protected function getData(): array
     {
         $customers = DB::table('penjualan_produks')
-            ->join('pelanggans', 'penjualan_produks.id_pelanggan', '=', 'pelanggans.id_pelanggan')
             ->join('pembayarans', 'penjualan_produks.id_penjualan', '=', 'pembayarans.id_penjualan')
             ->where('pembayarans.status_bayar', 'lunas')
-            ->selectRaw('pelanggans.nama_pelanggan, SUM(pembayarans.total_bayar) as total_belanja')
-            ->groupBy('pelanggans.nama_pelanggan')
+            ->selectRaw('penjualan_produks.nama_pelanggan, SUM(pembayarans.total_bayar) as total_belanja')
+            ->groupBy('penjualan_produks.nama_pelanggan')
             ->orderByDesc('total_belanja')
             ->limit(5)
             ->get();
