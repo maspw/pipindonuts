@@ -6,8 +6,6 @@ use App\Filament\Resources\PengeluaranOperasionalResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use App\Models\PengeluaranOperasional;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 
@@ -18,11 +16,6 @@ class ListPengeluaranOperasionals extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-
-            Actions\CreateAction::make(),
-        ];
-    }
-}
             Actions\Action::make('generate_operasional_ai_insight')
                 ->label('Generate Operasional AI Insight')
                 ->icon('heroicon-m-presentation-chart-line')
@@ -41,8 +34,8 @@ class ListPengeluaranOperasionals extends ListRecords
     protected function hitungInsightOperasionalAI(): void
     {
         $apiKey = env('GEMINI_API_KEY');
-        
-        $totalBiaya = PengeluaranOperasional::exists() ? PengeluaranOperasional::sum('nominal') : 0;
+
+        $totalBiaya     = PengeluaranOperasional::exists() ? PengeluaranOperasional::sum('nominal') : 0;
         $totalTransaksi = PengeluaranOperasional::count();
 
         $saranCadangan = "• ⚡ **Overhead Listrik**: Lakukan penjadwalan terpusat (*batch baking*) pada mesin oven dan *proofer* besar Pipindonuts guna memotong lonjakan beban biaya utilitas listrik bulanan secara signifikan.\n" .
@@ -56,7 +49,7 @@ class ListPengeluaranOperasionals extends ListRecords
             return;
         }
 
-       $prompt = "Anda adalah Chief Financial Officer (CFO) senior dan pakar bisnis kuliner untuk brand donat premium 'Pipindonuts' tahun 2026. Berdasarkan total pengeluaran operasional saat ini sebesar Rp " . number_format($totalBiaya, 0, ',', '.') . " dari {$totalTransaksi} transaksi, berikan analisis efisiensi yang sangat tajam.\n";
+        $prompt  = "Anda adalah Chief Financial Officer (CFO) senior dan pakar bisnis kuliner untuk brand donat premium 'Pipindonuts' tahun 2026. Berdasarkan total pengeluaran operasional saat ini sebesar Rp " . number_format($totalBiaya, 0, ',', '.') . " dari {$totalTransaksi} transaksi, berikan analisis efisiensi yang sangat tajam.\n";
         $prompt .= "WAJIB patuhi aturan format dan gaya bahasa ini secara mutlak:\n";
         $prompt .= "1. Tuliskan TEPAT 3 baris poin rekomendasi tindakan (gunakan awalan tanda bullet •).\n";
         $prompt .= "2. Setiap poin WAJIB diawali emoji yang pas (• ⚡, • 📦, • 📊) diikuti judul tebal markdown yang menjual, lalu penjelasan solusi operasional yang kritis dan solutif.\n";

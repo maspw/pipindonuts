@@ -23,7 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // TAMBAH INI JUGA!
         $middleware->redirectGuestsTo(fn () => route('kasir.login'));
-         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

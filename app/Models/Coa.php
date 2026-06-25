@@ -11,9 +11,7 @@ class Coa extends Model
     // karena kita merubah tabelnya dari coas menjadi coa
     protected $table = 'coa';
 
-    // seluruh kolom dapat dimodifikasi<<<<<<< nadzalfa
-    protected $guarded = [];
-    protected $guarded = []; //semua tabel boleh diisi atau diubah
+    // seluruh kolom dapat dimodifikasi
     protected $guarded = [];
     // relasi 1-n dengan jurnal_detail
     public function journalDetail()

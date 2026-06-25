@@ -21,7 +21,7 @@ class ClusteringDashboard extends Page
     public string $xAxisLabel    = '';
     public string $yAxisLabel    = '';
 
-    public function getTypes(): array
+    public function getTypes(): array //Daftar Mode Clustering
     {
         return [
             'penjualan'   => ['label' => 'Penjualan Produk',       'icon' => '🛒'],
@@ -32,7 +32,7 @@ class ClusteringDashboard extends Page
             'retur'       => ['label' => 'Retur Bahan Baku',        'icon' => '🔄'],
         ];
     }
-
+    // Entry Point & Reaktivitas
     public function mount(): void
     {
         $this->loadClustering();
@@ -53,7 +53,7 @@ class ClusteringDashboard extends Page
         ]);
     }
 
-    private function loadClustering(): void
+    private function loadClustering(): void // Router Internal
     {
         match ($this->activeType) {
             'penjualan'   => $this->clusterPenjualan(),
@@ -171,11 +171,7 @@ class ClusteringDashboard extends Page
         $this->runAndAssign($s, $m, 'y', ['🔴 High Risk', '🟡 Medium Risk', '🟢 Low Risk']);
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // HELPERS
-    // ──────────────────────────────────────────────────────────────
-
-    private function toSamples($collection, string $nameCol, string $xCol, string $yCol): array
+    private function toSamples($collection, string $nameCol, string $xCol, string $yCol): array // Konversi ke Format ML
     {
         $samples  = [];
         $metadata = [];
@@ -192,7 +188,7 @@ class ClusteringDashboard extends Page
         return [$samples, $metadata];
     }
 
-    private function runAndAssign(array $samples, array $metadata, string $sortBy, array $labels): void
+    private function runAndAssign(array $samples, array $metadata, string $sortBy, array $labels): void //Inti K-Means + Sorting
     {
         $this->clusterData   = [[], [], []];
         $this->clusterLabels = $labels;
